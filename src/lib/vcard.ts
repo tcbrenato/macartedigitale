@@ -5,7 +5,7 @@ export interface VCardData {
   title: string;
   phone: string;
   email: string;
-  url: string;
+  url?: string;
   address: string;
 }
 
@@ -19,10 +19,12 @@ export function generateVCard(data: VCardData): string {
     `TITLE:${data.title}`,
     `TEL;TYPE=CELL:${data.phone}`,
     `EMAIL:${data.email}`,
-    `URL:${data.url}`,
+    data.url ? `URL:${data.url}` : null,
     `ADR;TYPE=WORK:;;${data.address};;;`,
     'END:VCARD',
-  ].join('\r\n');
+  ]
+    .filter((line): line is string => line !== null)
+    .join('\r\n');
 }
 
 export function downloadVCard(data: VCardData): void {
@@ -31,7 +33,7 @@ export function downloadVCard(data: VCardData): void {
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-  link.download = 'Renato_Tchobo.vcf';
+  link.download = `${data.firstName}_${data.lastName}.vcf`;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

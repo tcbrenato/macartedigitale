@@ -90,10 +90,10 @@ body.dark {
 .animate-scale-in { animation: scaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
 
 .brand-gradient {
-  background: linear-gradient(135deg, #0100AD 0%, #2d2cb8 50%, #0100AD 100%);
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-light) 50%, var(--brand) 100%);
 }
 
-.brand-text { color: #0100AD; }
+.brand-text { color: var(--brand); }
 
 .shimmer-text {
   background: linear-gradient(90deg, #ffffff 0%, #c0c0ff 50%, #ffffff 100%);
