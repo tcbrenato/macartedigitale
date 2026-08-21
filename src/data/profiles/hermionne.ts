@@ -10,7 +10,7 @@ export const hermionne: Profile = {
   title: 'Business Development Manager',
   tagline: "Je développe des partenariats stratégiques et accélère la croissance commerciale de l'entreprise.",
 
-  photo: initialsAvatar('HA', '#6D28D9'),
+  photo: initialsAvatar('HA', '#EA580C'),
   banner:
     'https://images.pexels.com/photos/13577780/pexels-photo-13577780.jpeg?auto=compress&cs=tinysrgb&w=900&h=300&fit=crop',
 
@@ -35,8 +35,8 @@ export const hermionne: Profile = {
   social: {},
 
   theme: {
-    brand: '#6D28D9',
-    brandLight: '#8B5CF6',
-    brandDark: '#4C1D95',
+    brand: '#EA580C',
+    brandLight: '#F97316',
+    brandDark: '#9A3412',
   },
 };
