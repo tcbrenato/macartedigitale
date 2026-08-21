@@ -13,6 +13,7 @@ import {
   GraduationCap,
   Stethoscope,
   Scale,
+  Lightbulb,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -31,6 +32,7 @@ export const ICON_MAP = {
   GraduationCap,
   Stethoscope,
   Scale,
+  Lightbulb,
 } satisfies Record<string, LucideIcon>;
 
 export type IconName = keyof typeof ICON_MAP;
