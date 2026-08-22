@@ -1,5 +1,4 @@
 import type { Profile } from '@/types/profile';
-import { initialsAvatar } from '@/lib/avatar';
 
 export const kenethe: Profile = {
   slug: 'kenethe',
@@ -10,7 +9,7 @@ export const kenethe: Profile = {
   title: 'Technicienne de Vente en Pharmacie & Communication Digitale',
   tagline: "J'allie conseil client en pharmacie et stratégie digitale pour dynamiser l'image et les ventes de l'officine.",
 
-  photo: initialsAvatar('KK', '#15803D'),
+  photo: '/merveille.png',
   banner:
     'https://images.pexels.com/photos/13577780/pexels-photo-13577780.jpeg?auto=compress&cs=tinysrgb&w=900&h=300&fit=crop',
 
@@ -37,8 +36,8 @@ export const kenethe: Profile = {
   },
 
   theme: {
-    brand: '#15803D',
-    brandLight: '#22C55E',
-    brandDark: '#14532D',
+    brand: '#6E1423',
+    brandLight: '#9C1F35',
+    brandDark: '#4A0E18',
   },
 };
