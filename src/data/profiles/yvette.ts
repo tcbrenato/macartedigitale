@@ -1,5 +1,4 @@
 import type { Profile } from '@/types/profile';
-import { initialsAvatar } from '@/lib/avatar';
 
 export const yvette: Profile = {
   slug: 'yvette',
@@ -10,7 +9,7 @@ export const yvette: Profile = {
   title: 'Directrice Commerciale & Marketing',
   tagline: 'Je pilote la stratégie commerciale et marketing pour développer notre portefeuille clients.',
 
-  photo: initialsAvatar('YF', '#0E7490'),
+  photo: '/yvette.png',
   banner:
     'https://images.pexels.com/photos/13577780/pexels-photo-13577780.jpeg?auto=compress&cs=tinysrgb&w=900&h=300&fit=crop',
 

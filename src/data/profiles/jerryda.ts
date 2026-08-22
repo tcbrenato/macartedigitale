@@ -1,5 +1,4 @@
 import type { Profile } from '@/types/profile';
-import { initialsAvatar } from '@/lib/avatar';
 
 export const jerryda: Profile = {
   slug: 'jerryda',
@@ -10,7 +9,7 @@ export const jerryda: Profile = {
   title: 'Gestionnaire de Comptes Internationaux & Analyste de Données Digitales',
   tagline: 'Je pilote des comptes clients internationaux et transforme la donnée web en décisions business.',
 
-  photo: initialsAvatar('JK', '#BE123C'),
+  photo: '/jerryda.png',
   banner:
     'https://images.pexels.com/photos/13577780/pexels-photo-13577780.jpeg?auto=compress&cs=tinysrgb&w=900&h=300&fit=crop',
 

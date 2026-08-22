@@ -1,5 +1,4 @@
 import type { Profile } from '@/types/profile';
-import { initialsAvatar } from '@/lib/avatar';
 
 export const taofic: Profile = {
   slug: 'taofic',
@@ -9,9 +8,9 @@ export const taofic: Profile = {
   organization: 'CRF PERFECTION',
   title: 'Assistant de Direction & Consultant Junior en Ingénierie de la Formation et Communication Institutionnelle',
   tagline:
-    "Enseignant de français (vacataire) — j'accompagne le Directeur Général dans la gestion administrative, la coordination et la communication du Cabinet.",
+    "Enseignant de français — j'accompagne le Directeur Général dans la gestion administrative, la coordination et la communication du Cabinet.",
 
-  photo: initialsAvatar('TB', '#B45309'),
+  photo: '/taofic.png',
   banner:
     'https://images.pexels.com/photos/13577780/pexels-photo-13577780.jpeg?auto=compress&cs=tinysrgb&w=900&h=300&fit=crop',
 
