@@ -14,13 +14,12 @@ export interface ProfileSocialLinks {
   youtube?: string;
 }
 
-export interface ProfileTheme {
-  brand: string;
-  brandLight: string;
-  brandDark: string;
-}
+export type ProfileStatus = 'draft' | 'published';
 
 export interface Profile {
+  id: string;
+  userId: string | null;
+
   /** Used in the URL: /:slug */
   slug: string;
 
@@ -43,7 +42,12 @@ export interface Profile {
   city: string;
   countryLine: string;
 
+  status: ProfileStatus;
+  /** Card design/layout. Only 'classic' exists today; more coming later. */
+  templateId: string;
+  themePrimary: string;
+  themeSecondary: string;
+
   services: ProfileService[];
   social: ProfileSocialLinks;
-  theme: ProfileTheme;
 }

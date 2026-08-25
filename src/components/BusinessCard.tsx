@@ -19,10 +19,13 @@ import {
 } from 'lucide-react';
 import { downloadVCard } from '@/lib/vcard';
 import { ICON_MAP } from '@/lib/icons';
+import { darken } from '@/lib/color';
 import type { Profile } from '@/types/profile';
 
 interface BusinessCardProps {
   profile: Profile;
+  /** True when rendered inside the dashboard's live-preview panel, not as the public page. */
+  preview?: boolean;
 }
 
 const SOCIAL_ICONS = {
@@ -33,15 +36,16 @@ const SOCIAL_ICONS = {
   youtube: Youtube,
 } as const;
 
-function BusinessCard({ profile }: BusinessCardProps) {
+function BusinessCard({ profile, preview = false }: BusinessCardProps) {
   const [saved, setSaved] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
   const [dark, setDark] = useState(false);
 
   useEffect(() => {
+    if (preview) return;
     if (dark) document.body.classList.add('dark');
     else document.body.classList.remove('dark');
-  }, [dark]);
+  }, [dark, preview]);
 
   useEffect(() => {
     if (!servicesOpen) return;
@@ -53,8 +57,9 @@ function BusinessCard({ profile }: BusinessCardProps) {
   }, [servicesOpen]);
 
   useEffect(() => {
+    if (preview) return;
     document.title = `${profile.firstName} ${profile.lastName} | Carte de visite digitale`;
-  }, [profile.firstName, profile.lastName]);
+  }, [profile.firstName, profile.lastName, preview]);
 
   const handleSave = () => {
     downloadVCard({
@@ -72,9 +77,9 @@ function BusinessCard({ profile }: BusinessCardProps) {
   };
 
   const themeStyle = {
-    '--brand': profile.theme.brand,
-    '--brand-light': profile.theme.brandLight,
-    '--brand-dark': profile.theme.brandDark,
+    '--brand': profile.themePrimary,
+    '--brand-light': profile.themeSecondary,
+    '--brand-dark': darken(profile.themePrimary, 0.15),
   } as CSSProperties;
 
   const darkCard = dark ? 'bg-[#0f1128] border border-[#1e2148]' : 'bg-white';
@@ -91,12 +96,12 @@ function BusinessCard({ profile }: BusinessCardProps) {
   ][];
 
   return (
-    <div className="h-[100dvh] w-full flex items-center justify-center p-3 sm:p-4 overflow-hidden" style={themeStyle}>
+    <div className="h-full w-full flex items-center justify-center p-3 sm:p-4 overflow-hidden" style={themeStyle}>
       <div className="w-full max-w-[400px] h-full max-h-[820px] flex flex-col animate-fade-in-up">
         {/* ===== CARD ===== */}
         <div className={`rounded-3xl overflow-hidden card-shadow flex flex-col flex-1 min-h-0 ${darkCard}`}>
           {/* Photo */}
-          <div className="relative shrink-0 w-full aspect-[4/5] max-h-[42vh] overflow-hidden animate-scale-in">
+          <div className="relative shrink-0 w-full aspect-[4/5] max-h-[45%] overflow-hidden animate-scale-in">
             <img
               src={profile.photo}
               alt={`${profile.firstName} ${profile.lastName}`}
