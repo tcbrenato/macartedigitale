@@ -10,8 +10,6 @@ export const yvette: Profile = {
   tagline: 'Je pilote la stratégie commerciale et marketing pour développer notre portefeuille clients.',
 
   photo: '/yvette.png',
-  banner:
-    'https://images.pexels.com/photos/13577780/pexels-photo-13577780.jpeg?auto=compress&cs=tinysrgb&w=900&h=300&fit=crop',
 
   phone: '+229 01 61 74 42 42',
   phoneRaw: '+2290161744242',

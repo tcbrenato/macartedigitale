@@ -10,8 +10,6 @@ export const renato: Profile = {
   tagline: 'Je crée des plateformes web et des logiciels de travail simples à utiliser.',
 
   photo: '/renatotcb.png',
-  banner:
-    'https://images.pexels.com/photos/13577780/pexels-photo-13577780.jpeg?auto=compress&cs=tinysrgb&w=900&h=300&fit=crop',
 
   phone: '+229 01 92 37 77 77',
   phoneRaw: '+2290192377777',

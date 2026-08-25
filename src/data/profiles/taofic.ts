@@ -11,8 +11,6 @@ export const taofic: Profile = {
     "Enseignant de français — j'accompagne le Directeur Général dans la gestion administrative, la coordination et la communication du Cabinet.",
 
   photo: '/taofic.png',
-  banner:
-    'https://images.pexels.com/photos/13577780/pexels-photo-13577780.jpeg?auto=compress&cs=tinysrgb&w=900&h=300&fit=crop',
 
   phone: '+229 01 91 09 84 68',
   phoneRaw: '+2290191098468',

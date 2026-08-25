@@ -10,8 +10,6 @@ export const jerryda: Profile = {
   tagline: 'Je pilote des comptes clients internationaux et transforme la donnée web en décisions business.',
 
   photo: '/jerryda.png',
-  banner:
-    'https://images.pexels.com/photos/13577780/pexels-photo-13577780.jpeg?auto=compress&cs=tinysrgb&w=900&h=300&fit=crop',
 
   phone: '+228 93 92 46 19',
   phoneRaw: '+22893924619',

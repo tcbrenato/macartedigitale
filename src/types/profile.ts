@@ -31,7 +31,6 @@ export interface Profile {
   tagline: string;
 
   photo: string;
-  banner: string;
 
   phone: string;
   phoneRaw: string;

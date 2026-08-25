@@ -12,7 +12,8 @@ import {
   Instagram,
   Twitter,
   Youtube,
-  RotateCw,
+  Sparkles,
+  X,
   Sun,
   Moon,
 } from 'lucide-react';
@@ -34,13 +35,22 @@ const SOCIAL_ICONS = {
 
 function BusinessCard({ profile }: BusinessCardProps) {
   const [saved, setSaved] = useState(false);
-  const [flipped, setFlipped] = useState<number | null>(null);
+  const [servicesOpen, setServicesOpen] = useState(false);
   const [dark, setDark] = useState(false);
 
   useEffect(() => {
     if (dark) document.body.classList.add('dark');
     else document.body.classList.remove('dark');
   }, [dark]);
+
+  useEffect(() => {
+    if (!servicesOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setServicesOpen(false);
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [servicesOpen]);
 
   useEffect(() => {
     document.title = `${profile.firstName} ${profile.lastName} | Carte de visite digitale`;
@@ -71,8 +81,9 @@ function BusinessCard({ profile }: BusinessCardProps) {
   const darkText = dark ? 'text-white' : 'text-gray-900';
   const darkSubText = dark ? 'text-gray-400' : 'text-gray-500';
   const darkLabel = dark ? 'text-gray-300' : 'text-gray-900';
-  const darkHint = dark ? 'text-gray-500' : 'text-gray-400';
   const darkSocial = dark ? 'bg-[#1e2148] hover:bg-[var(--brand)]' : 'bg-gray-100 hover:bg-[var(--brand)]';
+  const darkModalBorder = dark ? 'border-[#1e2148]' : 'border-gray-100';
+  const darkModalClose = dark ? 'bg-[#1e2148] hover:bg-[#2a2d5c]' : 'bg-gray-100 hover:bg-gray-200';
 
   const socialLinks = Object.entries(profile.social).filter(([, href]) => Boolean(href)) as [
     keyof typeof SOCIAL_ICONS,
@@ -84,43 +95,23 @@ function BusinessCard({ profile }: BusinessCardProps) {
       <div className="w-full max-w-[400px] h-full max-h-[820px] flex flex-col animate-fade-in-up">
         {/* ===== CARD ===== */}
         <div className={`rounded-3xl overflow-hidden card-shadow flex flex-col flex-1 min-h-0 ${darkCard}`}>
-          {/* Banner + Profile */}
-          <div className="relative shrink-0">
-            <div className="h-20 sm:h-24 overflow-hidden relative">
-              <img src={profile.banner} alt="Bannière" className="w-full h-full object-cover" />
-              <div className="absolute inset-0 brand-gradient opacity-85" />
-              {/* Bienvenue pushed up */}
-              <div className="absolute inset-x-0 top-1.5 flex items-center justify-center">
-                <h1 className="shimmer-text text-xl sm:text-2xl font-extrabold tracking-tight animate-fade-in">
-                  Bienvenue
-                </h1>
-              </div>
-              {/* Theme toggle */}
-              <button
-                onClick={() => setDark(!dark)}
-                className="theme-toggle absolute top-1.5 right-2.5 w-7 h-7 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/30"
-              >
-                {dark ? <Sun className="w-3.5 h-3.5 text-white" /> : <Moon className="w-3.5 h-3.5 text-white" />}
-              </button>
-            </div>
-            <div className="flex justify-center -mt-9">
-              <div className="relative animate-scale-in">
-                <div className="w-16 h-16 rounded-full overflow-hidden ring-[3px] ring-white shadow-md">
-                  <img
-                    src={profile.photo}
-                    alt={`${profile.firstName} ${profile.lastName}`}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-[var(--brand)] border-2 border-white flex items-center justify-center">
-                  <CheckCircle2 className="w-2.5 h-2.5 text-white" />
-                </div>
-              </div>
-            </div>
+          {/* Photo */}
+          <div className="relative shrink-0 w-full aspect-[4/5] max-h-[42vh] overflow-hidden animate-scale-in">
+            <img
+              src={profile.photo}
+              alt={`${profile.firstName} ${profile.lastName}`}
+              className="w-full h-full object-cover"
+            />
+            <button
+              onClick={() => setDark(!dark)}
+              className="theme-toggle absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center hover:bg-black/40"
+            >
+              {dark ? <Sun className="w-4 h-4 text-white" /> : <Moon className="w-4 h-4 text-white" />}
+            </button>
           </div>
 
           {/* Name + Title + Pitch */}
-          <div className="text-center px-4 pt-2 pb-1 shrink-0">
+          <div className="text-center px-4 pt-3 pb-1 shrink-0">
             <h2 className={`text-lg font-extrabold tracking-tight leading-tight ${darkText}`}>
               {profile.firstName} {profile.lastName}
             </h2>
@@ -130,52 +121,6 @@ function BusinessCard({ profile }: BusinessCardProps) {
             <p className={`text-[10px] leading-relaxed mt-1.5 max-w-[280px] mx-auto ${darkSubText}`}>
               {profile.tagline}
             </p>
-          </div>
-
-          {/* ===== SERVICES (flip cards) ===== */}
-          <div className="px-3 pt-2 flex-1 min-h-0 flex flex-col">
-            <div className="flex items-center gap-1.5 mb-1.5 shrink-0">
-              <div className="w-0.5 h-3.5 rounded-full bg-[var(--brand)]" />
-              <h3 className={`text-[10px] font-bold tracking-wide uppercase ${darkLabel}`}>
-                Ce que je fais concrètement
-              </h3>
-              <span className={`ml-auto text-[9px] flex items-center gap-0.5 ${darkHint}`}>
-                <RotateCw className="w-2.5 h-2.5" /> Appuyez
-              </span>
-            </div>
-            <div className="grid grid-cols-3 gap-2 flex-1 min-h-0">
-              {profile.services.map((s, i) => {
-                const Icon = ICON_MAP[s.icon];
-                const isFlipped = flipped === i;
-                return (
-                  <div
-                    key={s.short}
-                    className={`flip-card ${isFlipped ? 'flipped' : ''} animate-fade-in-up`}
-                    style={{ animationDelay: `${0.1 + i * 0.06}s` }}
-                    onClick={() => setFlipped(isFlipped ? null : i)}
-                  >
-                    <div className="flip-inner">
-                      {/* Front */}
-                      <div className="flip-front">
-                        <div className="w-8 h-8 rounded-lg bg-[var(--brand)]/10 flex items-center justify-center mb-1.5">
-                          <Icon className="w-4 h-4 brand-text" />
-                        </div>
-                        <h4 className={`text-[10px] font-bold leading-tight ${darkText}`}>
-                          {s.short}
-                        </h4>
-                      </div>
-                      {/* Back */}
-                      <div className="flip-back">
-                        <Icon className="w-4 h-4 text-white/80 mb-1.5" />
-                        <p className="text-[9px] font-medium leading-snug px-0.5">
-                          {s.desc}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
           </div>
 
           {/* ===== CONTACT DIRECT ===== */}
@@ -216,8 +161,14 @@ function BusinessCard({ profile }: BusinessCardProps) {
             </div>
           </div>
 
-          {/* ===== SAVE + SOCIAL ===== */}
-          <div className="px-3 pt-2 pb-3 shrink-0">
+          {/* ===== SERVICES + SAVE + SOCIAL ===== */}
+          <div className="px-3 pt-2 pb-3 shrink-0 space-y-2">
+            <button
+              onClick={() => setServicesOpen(true)}
+              className="w-full bg-[var(--brand)] hover:bg-[var(--brand-dark)] text-white font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 text-xs tracking-wide shadow-md shadow-[var(--brand)]/25"
+            >
+              <Sparkles className="w-4 h-4" /> Ce que je fais concrètement
+            </button>
             <button
               onClick={handleSave}
               className="save-btn w-full brand-gradient text-white font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 text-xs tracking-wide shadow-md shadow-[var(--brand)]/25"
@@ -231,7 +182,7 @@ function BusinessCard({ profile }: BusinessCardProps) {
 
             {/* Social icons */}
             {socialLinks.length > 0 && (
-              <div className="flex items-center justify-center gap-3 mt-2.5">
+              <div className="flex items-center justify-center gap-3">
                 {socialLinks.map(([key, href]) => {
                   const SocialIcon = SOCIAL_ICONS[key];
                   return (
@@ -263,6 +214,45 @@ function BusinessCard({ profile }: BusinessCardProps) {
           </div>
         </div>
       </div>
+
+      {/* ===== SERVICES MODAL ===== */}
+      {servicesOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm p-3 animate-fade-in"
+          onClick={() => setServicesOpen(false)}
+        >
+          <div
+            className={`w-full max-w-[380px] max-h-[80vh] rounded-2xl overflow-hidden flex flex-col animate-scale-in ${darkCard}`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={`flex items-center justify-between px-4 py-3 border-b shrink-0 ${darkModalBorder}`}>
+              <h3 className={`text-sm font-bold ${darkText}`}>Ce que je fais concrètement</h3>
+              <button
+                onClick={() => setServicesOpen(false)}
+                className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 ${darkModalClose}`}
+              >
+                <X className={`w-4 h-4 ${darkText}`} />
+              </button>
+            </div>
+            <div className="overflow-y-auto px-4 py-3 flex flex-col gap-3">
+              {profile.services.map((s) => {
+                const Icon = ICON_MAP[s.icon];
+                return (
+                  <div key={s.short} className="flex gap-3">
+                    <div className="w-9 h-9 rounded-lg bg-[var(--brand)]/10 flex items-center justify-center shrink-0">
+                      <Icon className="w-4 h-4 brand-text" />
+                    </div>
+                    <div>
+                      <h4 className={`text-xs font-bold ${darkText}`}>{s.short}</h4>
+                      <p className={`text-[11px] leading-relaxed mt-0.5 ${darkSubText}`}>{s.desc}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

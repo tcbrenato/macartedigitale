@@ -1,5 +1,4 @@
 import type { Profile } from '@/types/profile';
-import { initialsAvatar } from '@/lib/avatar';
 
 export const hermionne: Profile = {
   slug: 'hermionne',
@@ -10,9 +9,7 @@ export const hermionne: Profile = {
   title: 'Business Development Manager',
   tagline: "Je développe des partenariats stratégiques et accélère la croissance commerciale de l'entreprise.",
 
-  photo: initialsAvatar('HA', '#EA580C'),
-  banner:
-    'https://images.pexels.com/photos/13577780/pexels-photo-13577780.jpeg?auto=compress&cs=tinysrgb&w=900&h=300&fit=crop',
+  photo: '/hermionne.png',
 
   phone: '+229 01 96 21 71 12',
   phoneRaw: '+2290196217112',

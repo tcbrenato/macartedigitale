@@ -10,8 +10,6 @@ export const kenethe: Profile = {
   tagline: "J'allie conseil client en pharmacie et stratégie digitale pour dynamiser l'image et les ventes de l'officine.",
 
   photo: '/merveille.png',
-  banner:
-    'https://images.pexels.com/photos/13577780/pexels-photo-13577780.jpeg?auto=compress&cs=tinysrgb&w=900&h=300&fit=crop',
 
   phone: '+229 01 45 21 33 21',
   phoneRaw: '+2290145213321',
