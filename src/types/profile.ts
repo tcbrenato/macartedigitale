@@ -16,6 +16,14 @@ export interface ProfileSocialLinks {
 
 export type ProfileStatus = 'draft' | 'published';
 
+/**
+ * 'public' and 'link_only' behave identically today (both reachable via direct link) —
+ * they only diverge once a searchable directory exists to be listed in or excluded from.
+ * 'connections_only' has real effect now: it takes the card off public reach entirely
+ * until a connections system exists to grant exceptions.
+ */
+export type ProfileVisibility = 'public' | 'link_only' | 'connections_only';
+
 export interface Profile {
   id: string;
   userId: string | null;
@@ -49,6 +57,7 @@ export interface Profile {
   countryLine: string;
 
   status: ProfileStatus;
+  visibility: ProfileVisibility;
   /** Card design/layout. Only 'classic' exists today; more coming later. */
   templateId: string;
   themePrimary: string;

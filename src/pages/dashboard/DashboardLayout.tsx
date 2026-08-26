@@ -43,6 +43,7 @@ function emptyProfile(userId: string, email: string): DraftProfile {
     city: '',
     countryLine: '',
     status: 'draft',
+    visibility: 'public',
     templateId: 'classic',
     themePrimary: '#0100AD',
     themeSecondary: '#3a39d0',

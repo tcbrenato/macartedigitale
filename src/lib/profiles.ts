@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/supabase';
-import type { Profile, ProfileService, ProfileSocialLinks, ProfileStatus } from '@/types/profile';
+import type { Profile, ProfileService, ProfileSocialLinks, ProfileStatus, ProfileVisibility } from '@/types/profile';
 
 interface ProfileRow {
   id: string;
@@ -23,6 +23,7 @@ interface ProfileRow {
   city: string;
   country_line: string;
   status: ProfileStatus;
+  visibility: ProfileVisibility;
   template_id: string;
   theme_primary: string;
   theme_secondary: string;
@@ -54,6 +55,7 @@ function fromRow(row: ProfileRow): Profile {
     city: row.city,
     countryLine: row.country_line,
     status: row.status,
+    visibility: row.visibility ?? 'public',
     templateId: row.template_id,
     themePrimary: row.theme_primary,
     themeSecondary: row.theme_secondary,
@@ -85,6 +87,7 @@ function toRow(profile: Omit<Profile, 'id'>) {
     city: profile.city,
     country_line: profile.countryLine,
     status: profile.status,
+    visibility: profile.visibility,
     template_id: profile.templateId,
     theme_primary: profile.themePrimary,
     theme_secondary: profile.themeSecondary,

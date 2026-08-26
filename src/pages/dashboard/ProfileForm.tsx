@@ -1,9 +1,9 @@
 import { useMemo, useState, type ReactNode } from 'react';
-import { Plus, Trash2, ExternalLink, CheckCircle2, Eye, Pencil, ChevronDown } from 'lucide-react';
+import { Plus, Trash2, ExternalLink, CheckCircle2, Eye, Pencil, ChevronDown, Check } from 'lucide-react';
 import { derivePhoneFields } from '@/lib/phone';
 import { ICON_MAP, type IconName } from '@/lib/icons';
 import BusinessCard from '@/components/BusinessCard';
-import type { Profile, ProfileService, ProfileSocialLinks } from '@/types/profile';
+import type { Profile, ProfileService, ProfileSocialLinks, ProfileVisibility } from '@/types/profile';
 import type { DashboardContext } from './DashboardLayout';
 
 const SOCIAL_FIELDS: { key: keyof ProfileSocialLinks; label: string }[] = [
@@ -12,6 +12,24 @@ const SOCIAL_FIELDS: { key: keyof ProfileSocialLinks; label: string }[] = [
   { key: 'instagram', label: 'Instagram' },
   { key: 'twitter', label: 'Twitter / X' },
   { key: 'youtube', label: 'YouTube' },
+];
+
+const VISIBILITY_OPTIONS: { value: ProfileVisibility; label: string; desc: string }[] = [
+  {
+    value: 'public',
+    label: 'Publique',
+    desc: "Visible par tous. Sera listée dans l'annuaire de recherche une fois disponible.",
+  },
+  {
+    value: 'link_only',
+    label: 'Lien direct uniquement',
+    desc: "Accessible à qui a le lien exact — ne sera pas listée dans l'annuaire (quand il existera). Pour l'instant, identique à \"Publique\".",
+  },
+  {
+    value: 'connections_only',
+    label: 'Mes connexions uniquement',
+    desc: "Visible seulement par toi pour l'instant (le lien public est inaccessible) — les connexions arrivent bientôt.",
+  },
 ];
 
 const REQUIRED_FIELD_GETTERS: ((d: DashboardContext['draft']) => boolean)[] = [
@@ -304,6 +322,34 @@ function ProfileForm({ draft, setDraft, saving, uploading, message, error, handl
           </div>
         ))}
         {draft.services.length === 0 && <p className="text-xs text-gray-400">Aucun élément pour l'instant.</p>}
+      </Card>
+
+      <Card title="Confidentialité">
+        <div className="flex flex-col gap-2">
+          {VISIBILITY_OPTIONS.map(({ value, label, desc }) => {
+            const selected = draft.visibility === value;
+            return (
+              <button
+                key={value}
+                type="button"
+                onClick={() => update('visibility', value)}
+                className="flex items-start gap-3 rounded-xl border p-3 text-left transition-colors"
+                style={selected ? { borderColor: draft.themePrimary, backgroundColor: `${draft.themePrimary}0D` } : { borderColor: '#E5E7EB' }}
+              >
+                <span
+                  className="w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5"
+                  style={{ borderColor: selected ? draft.themePrimary : '#D1D5DB' }}
+                >
+                  {selected && <Check className="w-3 h-3" style={{ color: draft.themePrimary }} />}
+                </span>
+                <span>
+                  <span className="block text-sm font-bold text-gray-900">{label}</span>
+                  <span className="block text-xs text-gray-500 mt-0.5">{desc}</span>
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </Card>
 
       <Card title="Apparence">
