@@ -13,6 +13,8 @@ import AdminEditProfile from '@/pages/dashboard/AdminEditProfile';
 import Directory from '@/pages/dashboard/Directory';
 import Connections from '@/pages/dashboard/Connections';
 import AdminContactMessages from '@/pages/dashboard/AdminContactMessages';
+import AdminEvents from '@/pages/dashboard/AdminEvents';
+import AdminEventMembers from '@/pages/dashboard/AdminEventMembers';
 import ProfilePage from '@/pages/ProfilePage';
 import Contact from '@/pages/Contact';
 import Privacy from '@/pages/Privacy';
@@ -70,6 +72,22 @@ function App() {
           element={
             <RequireAdmin>
               <AdminContactMessages />
+            </RequireAdmin>
+          }
+        />
+        <Route
+          path="admin/events"
+          element={
+            <RequireAdmin>
+              <AdminEvents />
+            </RequireAdmin>
+          }
+        />
+        <Route
+          path="admin/events/:id"
+          element={
+            <RequireAdmin>
+              <AdminEventMembers />
             </RequireAdmin>
           }
         />

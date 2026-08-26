@@ -15,6 +15,7 @@ import {
   Compass,
   UserCheck,
   Mail,
+  Calendar,
 } from 'lucide-react';
 import { useAuth } from '@/lib/auth';
 import { supabase } from '@/lib/supabase';
@@ -270,6 +271,16 @@ function DashboardLayout() {
             >
               <Mail className="w-4 h-4 shrink-0" />
               {!isCollapsed && 'Messages'}
+            </NavLink>
+            <NavLink
+              to="/dashboard/admin/events"
+              title={isCollapsed ? 'Événements (admin)' : undefined}
+              onClick={() => setMobileNavOpen(false)}
+              className={({ isActive }) => navLinkClass(isActive, isCollapsed)}
+              style={({ isActive }) => (isActive ? { backgroundColor: draft.themePrimary } : undefined)}
+            >
+              <Calendar className="w-4 h-4 shrink-0" />
+              {!isCollapsed && 'Événements'}
             </NavLink>
           </>
         )}

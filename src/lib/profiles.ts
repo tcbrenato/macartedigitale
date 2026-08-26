@@ -195,29 +195,6 @@ export async function getProfilesByUserIds(userIds: string[]): Promise<Profile[]
   return (data as ProfileRow[]).map(fromRow);
 }
 
-export async function searchDirectory(query: string, excludeUserId?: string): Promise<Profile[]> {
-  let q = supabase.from('profiles').select('*').eq('status', 'published').eq('visibility', 'public');
-
-  if (excludeUserId) {
-    // Plain .neq() would silently drop every unclaimed profile too: in SQL,
-    // `NULL <> 'uuid'` evaluates to NULL (not true), so those rows never match
-    // a WHERE clause. Explicitly keep NULL user_id rows alongside the exclusion.
-    q = q.or(`user_id.neq.${excludeUserId},user_id.is.null`);
-  }
-
-  const trimmed = query.trim();
-  if (trimmed) {
-    const term = `%${trimmed}%`;
-    q = q.or(
-      `first_name.ilike.${term},last_name.ilike.${term},organization.ilike.${term},title.ilike.${term},city.ilike.${term},slug.ilike.${term}`
-    );
-  }
-
-  const { data, error } = await q.order('first_name', { ascending: true }).limit(50);
-  if (error) throw error;
-  return (data as ProfileRow[]).map(fromRow);
-}
-
 export async function uploadPhoto(userId: string, file: File): Promise<string> {
   const ext = file.name.split('.').pop() ?? 'png';
   const path = `${userId}/photo-${Date.now()}.${ext}`;

@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import { Search, Check, UserPlus, Clock } from 'lucide-react';
+import { Search, Check, UserPlus, Clock, Sparkles } from 'lucide-react';
 import { useAuth } from '@/lib/auth';
-import { searchDirectory } from '@/lib/profiles';
+import { getMyEvents, searchEventDirectory, type EventSummary } from '@/lib/events';
 import { getAllMyConnections, sendConnectionRequest, respondToRequest, type Connection } from '@/lib/connections';
 import type { Profile } from '@/types/profile';
 import type { DashboardContext } from './DashboardLayout';
@@ -10,6 +10,8 @@ import type { DashboardContext } from './DashboardLayout';
 function Directory() {
   const { user } = useAuth();
   const { draft } = useOutletContext<DashboardContext>();
+  const [events, setEvents] = useState<EventSummary[]>([]);
+  const [eventId, setEventId] = useState<string | null>(null);
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<Profile[]>([]);
   const [connections, setConnections] = useState<Connection[]>([]);
@@ -19,9 +21,10 @@ function Directory() {
 
   useEffect(() => {
     if (!user) return;
-    Promise.all([searchDirectory('', user.id), getAllMyConnections(user.id)])
-      .then(([profiles, conns]) => {
-        setResults(profiles);
+    Promise.all([getMyEvents(user.id), getAllMyConnections(user.id)])
+      .then(([myEvents, conns]) => {
+        setEvents(myEvents);
+        setEventId(myEvents[0]?.id ?? null);
         setConnections(conns);
       })
       .catch((err) => setError(err instanceof Error ? err.message : 'Une erreur est survenue.'))
@@ -29,15 +32,17 @@ function Directory() {
   }, [user]);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !eventId) {
+      setResults([]);
+      return;
+    }
     const timeout = setTimeout(() => {
-      searchDirectory(query, user.id)
+      searchEventDirectory(eventId, query, user.id)
         .then(setResults)
         .catch((err) => setError(err instanceof Error ? err.message : 'Une erreur est survenue.'));
     }, 250);
     return () => clearTimeout(timeout);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query]);
+  }, [query, eventId, user]);
 
   const connectionByUserId = useMemo(() => {
     if (!user) return new Map<string, Connection>();
@@ -80,12 +85,49 @@ function Directory() {
     return <div className="px-4 sm:px-8 py-8 text-sm text-gray-400 font-medium">Chargement…</div>;
   }
 
+  if (events.length === 0) {
+    return (
+      <div className="max-w-3xl mx-auto px-4 sm:px-8 py-8">
+        <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-sm border border-gray-100 p-10 text-center flex flex-col items-center gap-3">
+          <div className="w-12 h-12 rounded-2xl bg-[var(--dash-brand)]/10 text-[var(--dash-brand)] flex items-center justify-center">
+            <Sparkles className="w-6 h-6" />
+          </div>
+          <h2 className="text-lg font-black text-gray-950 tracking-tight">Fonctionnalité premium</h2>
+          <p className="text-sm text-gray-500 max-w-sm">
+            L'Annuaire et les Connexions sont réservés aux participants d'un événement (par exemple une conférence).
+            Contacte-nous pour en savoir plus.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-8 py-8 flex flex-col gap-6">
       <div>
         <h2 className="text-xl font-black text-gray-950 tracking-tight">Annuaire</h2>
-        <p className="text-sm text-gray-500 mt-1">Découvre et connecte-toi aux autres membres de la plateforme.</p>
+        <p className="text-sm text-gray-500 mt-1">Découvre et connecte-toi aux autres participants.</p>
       </div>
+
+      {events.length > 1 && (
+        <div className="flex flex-wrap gap-2">
+          {events.map((e) => (
+            <button
+              key={e.id}
+              type="button"
+              onClick={() => setEventId(e.id)}
+              className="text-xs font-bold px-4 py-2 rounded-2xl transition-all"
+              style={
+                eventId === e.id
+                  ? { backgroundColor: draft.themePrimary, color: 'white' }
+                  : { backgroundColor: '#F3F4F6', color: '#374151' }
+              }
+            >
+              {e.name}
+            </button>
+          ))}
+        </div>
+      )}
 
       <div className="relative">
         <Search className="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
