@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
 import { useOutletContext, useNavigate } from 'react-router-dom';
-import { Pencil, QrCode, ExternalLink, CreditCard, ChevronRight } from 'lucide-react';
+import { Pencil, QrCode, ExternalLink, CreditCard, ChevronRight, ShieldCheck } from 'lucide-react';
+import { useAuth } from '@/lib/auth';
+import { isAdmin } from '@/lib/admin';
 import type { DashboardContext } from './DashboardLayout';
 
 const REQUIRED_FIELD_GETTERS: ((d: DashboardContext['draft']) => boolean)[] = [
@@ -74,6 +76,7 @@ function AccessCard({ icon: Icon, title, desc, onClick, href, disabled, badge, c
 
 function Overview() {
   const { draft } = useOutletContext<DashboardContext>();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   const progress = useMemo(() => {
@@ -132,11 +135,19 @@ function Overview() {
         <AccessCard
           icon={CreditCard}
           title="Commander une carte RFID"
-          desc="Service géré manuellement, disponible bientôt"
-          disabled
-          badge="Bientôt"
+          desc="Design personnalisé, matériaux, quantité — on en discute directement"
+          onClick={() => navigate('/dashboard/rfid')}
           color={draft.themePrimary}
         />
+        {isAdmin(user?.email) && (
+          <AccessCard
+            icon={ShieldCheck}
+            title="Commandes RFID (admin)"
+            desc="Voir et gérer toutes les demandes des utilisateurs"
+            onClick={() => navigate('/dashboard/admin/rfid')}
+            color={draft.themePrimary}
+          />
+        )}
       </div>
     </div>
   );

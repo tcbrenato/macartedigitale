@@ -1,10 +1,11 @@
 import { useEffect, useState, type ChangeEvent, type CSSProperties } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { LayoutGrid, Pencil, QrCode, LogOut, Menu, X, CreditCard } from 'lucide-react';
+import { LayoutGrid, Pencil, QrCode, LogOut, Menu, X, CreditCard, ShieldCheck } from 'lucide-react';
 import { useAuth } from '@/lib/auth';
 import { supabase } from '@/lib/supabase';
 import { getMyProfile, saveProfile, uploadPhoto } from '@/lib/profiles';
 import { generateAndUploadQrCode } from '@/lib/qrcode';
+import { isAdmin } from '@/lib/admin';
 import type { Profile } from '@/types/profile';
 
 export type DraftProfile = Omit<Profile, 'id'> & { id?: string };
@@ -51,6 +52,7 @@ const NAV_ITEMS = [
   { to: '/dashboard', label: 'Accueil', icon: LayoutGrid, end: true },
   { to: '/dashboard/edit', label: 'Modifier ma carte', icon: Pencil, end: false },
   { to: '/dashboard/qrcode', label: 'QR Code', icon: QrCode, end: false },
+  { to: '/dashboard/rfid', label: 'Commander une carte RFID', icon: CreditCard, end: false },
 ];
 
 function DashboardLayout() {
@@ -164,11 +166,17 @@ function DashboardLayout() {
             {label}
           </NavLink>
         ))}
-        <div className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-gray-300 cursor-not-allowed">
-          <CreditCard className="w-4 h-4 shrink-0" />
-          Commander une carte RFID
-          <span className="ml-auto text-[10px] font-bold uppercase tracking-wide text-gray-300">Bientôt</span>
-        </div>
+        {isAdmin(user?.email) && (
+          <NavLink
+            to="/dashboard/admin/rfid"
+            onClick={() => setMobileNavOpen(false)}
+            className={({ isActive }) => navLinkClass(isActive)}
+            style={({ isActive }) => (isActive ? { backgroundColor: draft.themePrimary } : undefined)}
+          >
+            <ShieldCheck className="w-4 h-4 shrink-0" />
+            Commandes RFID (admin)
+          </NavLink>
+        )}
       </nav>
       <button
         onClick={handleLogout}

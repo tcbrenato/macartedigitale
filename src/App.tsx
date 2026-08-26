@@ -6,9 +6,12 @@ import DashboardLayout from '@/pages/dashboard/DashboardLayout';
 import Overview from '@/pages/dashboard/Overview';
 import EditCard from '@/pages/dashboard/EditCard';
 import QrCode from '@/pages/dashboard/QrCode';
+import RfidOrder from '@/pages/dashboard/RfidOrder';
+import AdminRfidOrders from '@/pages/dashboard/AdminRfidOrders';
 import ProfilePage from '@/pages/ProfilePage';
 import NotFound from '@/pages/NotFound';
 import RequireAuth from '@/components/RequireAuth';
+import RequireAdmin from '@/components/RequireAdmin';
 
 function App() {
   return (
@@ -27,6 +30,15 @@ function App() {
         <Route index element={<Overview />} />
         <Route path="edit" element={<EditCard />} />
         <Route path="qrcode" element={<QrCode />} />
+        <Route path="rfid" element={<RfidOrder />} />
+        <Route
+          path="admin/rfid"
+          element={
+            <RequireAdmin>
+              <AdminRfidOrders />
+            </RequireAdmin>
+          }
+        />
       </Route>
       <Route path="/:slug" element={<ProfilePage />} />
       <Route path="*" element={<NotFound />} />
