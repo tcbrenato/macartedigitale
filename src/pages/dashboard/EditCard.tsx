@@ -1,6 +1,6 @@
 import { useMemo, useState, type ReactNode } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import { Plus, Trash2, ExternalLink, CheckCircle2, Eye, Pencil } from 'lucide-react';
+import { Plus, Trash2, ExternalLink, CheckCircle2, Eye, Pencil, ChevronDown } from 'lucide-react';
 import { derivePhoneFields } from '@/lib/phone';
 import { ICON_MAP, type IconName } from '@/lib/icons';
 import BusinessCard from '@/components/BusinessCard';
@@ -45,11 +45,19 @@ function Field({ label, filled, children }: { label: string; filled?: boolean; c
   );
 }
 
-function Card({ title, children }: { title: string; children: ReactNode }) {
+function Card({ title, children, defaultOpen = true }: { title: string; children: ReactNode; defaultOpen?: boolean }) {
+  const [open, setOpen] = useState(defaultOpen);
   return (
-    <section className="bg-white rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] p-5 flex flex-col gap-4">
-      <h2 className="text-xs font-bold uppercase tracking-wide text-gray-400">{title}</h2>
-      {children}
+    <section className="bg-white rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] overflow-hidden">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        className="w-full flex items-center justify-between gap-3 px-5 py-4 text-left"
+      >
+        <h2 className="text-xs font-bold uppercase tracking-wide text-gray-400">{title}</h2>
+        <ChevronDown className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${open ? 'rotate-180' : ''}`} />
+      </button>
+      {open && <div className="px-5 pb-5 flex flex-col gap-4">{children}</div>}
     </section>
   );
 }
@@ -132,8 +140,8 @@ function EditCard() {
         </div>
       </div>
 
-      <div className="grid lg:grid-cols-[1fr_400px] gap-6 items-start">
-      <div className={`${mobileView === 'edit' ? 'flex' : 'hidden'} lg:flex flex-col gap-4`}>
+      <div className="grid lg:grid-cols-[1fr_400px] gap-6 items-start min-w-0">
+      <div className={`${mobileView === 'edit' ? 'flex' : 'hidden'} lg:flex flex-col gap-4 min-w-0`}>
       {draft.status === 'published' && (
         <a
           href={`/${draft.slug}`}

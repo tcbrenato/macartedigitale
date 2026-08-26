@@ -1,6 +1,6 @@
 import { useEffect, useState, type ChangeEvent, type CSSProperties } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { LayoutGrid, Pencil, QrCode, LogOut, Menu, X, CreditCard, ShieldCheck } from 'lucide-react';
+import { LayoutGrid, Pencil, QrCode, LogOut, Menu, X, CreditCard, ShieldCheck, ChevronsLeft, ChevronsRight } from 'lucide-react';
 import { useAuth } from '@/lib/auth';
 import { supabase } from '@/lib/supabase';
 import { getMyProfile, saveProfile, uploadPhoto } from '@/lib/profiles';
@@ -68,6 +68,11 @@ function DashboardLayout() {
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(() => localStorage.getItem('dashboard-sidebar-collapsed') === '1');
+
+  useEffect(() => {
+    localStorage.setItem('dashboard-sidebar-collapsed', collapsed ? '1' : '0');
+  }, [collapsed]);
 
   useEffect(() => {
     if (!user) return;
@@ -145,15 +150,22 @@ function DashboardLayout() {
 
   const dashStyle = { '--dash-brand': draft.themePrimary } as CSSProperties;
 
-  const navLinkClass = (isActive: boolean) =>
-    `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
-      isActive ? 'text-white' : 'text-gray-600 hover:bg-gray-100'
-    }`;
+  const navLinkClass = (isActive: boolean, isCollapsed: boolean) =>
+    `flex items-center gap-3 rounded-xl text-sm font-semibold transition-colors ${
+      isCollapsed ? 'justify-center px-0 py-2.5' : 'px-3.5 py-2.5'
+    } ${isActive ? 'text-white' : 'text-gray-600 hover:bg-gray-100'}`;
 
-  const sidebarContent = (
+  const renderSidebarContent = (isCollapsed: boolean) => (
     <>
-      <div className="px-3.5 mb-4">
-        <h1 className="text-sm font-extrabold text-gray-900">Mon tableau de bord</h1>
+      <div className={`mb-4 flex items-center ${isCollapsed ? 'justify-center' : 'justify-between px-3.5'}`}>
+        {!isCollapsed && <h1 className="text-sm font-extrabold text-gray-900">Mon tableau de bord</h1>}
+        <button
+          onClick={() => setCollapsed((c) => !c)}
+          className="hidden lg:flex w-7 h-7 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-700"
+          title={isCollapsed ? 'Déplier' : 'Replier'}
+        >
+          {isCollapsed ? <ChevronsRight className="w-4 h-4" /> : <ChevronsLeft className="w-4 h-4" />}
+        </button>
       </div>
       <nav className="flex flex-col gap-1 flex-1">
         {NAV_ITEMS.map(({ to, label, icon: Icon, end }) => (
@@ -161,31 +173,36 @@ function DashboardLayout() {
             key={to}
             to={to}
             end={end}
+            title={isCollapsed ? label : undefined}
             onClick={() => setMobileNavOpen(false)}
-            className={({ isActive }) => navLinkClass(isActive)}
+            className={({ isActive }) => navLinkClass(isActive, isCollapsed)}
             style={({ isActive }) => (isActive ? { backgroundColor: draft.themePrimary } : undefined)}
           >
             <Icon className="w-4 h-4 shrink-0" />
-            {label}
+            {!isCollapsed && label}
           </NavLink>
         ))}
         {isAdmin(user?.email) && (
           <NavLink
             to="/dashboard/admin/rfid"
+            title={isCollapsed ? 'Commandes RFID (admin)' : undefined}
             onClick={() => setMobileNavOpen(false)}
-            className={({ isActive }) => navLinkClass(isActive)}
+            className={({ isActive }) => navLinkClass(isActive, isCollapsed)}
             style={({ isActive }) => (isActive ? { backgroundColor: draft.themePrimary } : undefined)}
           >
             <ShieldCheck className="w-4 h-4 shrink-0" />
-            Commandes RFID (admin)
+            {!isCollapsed && 'Commandes RFID (admin)'}
           </NavLink>
         )}
       </nav>
       <button
         onClick={handleLogout}
-        className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-gray-500 hover:bg-gray-100"
+        title={isCollapsed ? 'Déconnexion' : undefined}
+        className={`flex items-center gap-3 rounded-xl text-sm font-semibold text-gray-500 hover:bg-gray-100 ${
+          isCollapsed ? 'justify-center px-0 py-2.5' : 'px-3.5 py-2.5'
+        }`}
       >
-        <LogOut className="w-4 h-4" /> Déconnexion
+        <LogOut className="w-4 h-4 shrink-0" /> {!isCollapsed && 'Déconnexion'}
       </button>
     </>
   );
@@ -193,8 +210,12 @@ function DashboardLayout() {
   return (
     <div className="min-h-[100dvh] w-full bg-[#F9FAFB] flex" style={dashStyle}>
       {/* ===== DESKTOP SIDEBAR ===== */}
-      <aside className="hidden lg:flex flex-col w-60 shrink-0 border-r border-gray-200 bg-white p-4">
-        {sidebarContent}
+      <aside
+        className={`hidden lg:flex flex-col shrink-0 border-r border-gray-200 bg-white p-4 transition-[width] duration-200 ${
+          collapsed ? 'w-[72px]' : 'w-60'
+        }`}
+      >
+        {renderSidebarContent(collapsed)}
       </aside>
 
       {/* ===== MOBILE HEADER + DRAWER ===== */}
@@ -217,7 +238,7 @@ function DashboardLayout() {
             >
               <X className="w-4 h-4" />
             </button>
-            {sidebarContent}
+            {renderSidebarContent(false)}
           </div>
         </div>
       )}
