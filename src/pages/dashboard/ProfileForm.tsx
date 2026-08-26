@@ -185,15 +185,13 @@ function ProfileForm({ draft, setDraft, saving, uploading, message, error, handl
         </div>
 
         <Field label="Lien de la carte (slug)" filled={Boolean(draft.slug)}>
-          <div className="flex items-center gap-1">
-            <span className="text-xs text-gray-400 shrink-0">macartedigitale.vercel.app/</span>
-            <input
-              className={inputBase}
-              value={draft.slug}
-              onChange={(e) => update('slug', e.target.value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-'))}
-              placeholder="ton-nom"
-            />
-          </div>
+          <p className="text-xs text-gray-400 mb-1 truncate">macartedigitale.vercel.app/</p>
+          <input
+            className={inputBase}
+            value={draft.slug}
+            onChange={(e) => update('slug', e.target.value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-'))}
+            placeholder="ton-nom"
+          />
         </Field>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

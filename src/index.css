@@ -17,11 +17,19 @@
 html, body {
   scroll-behavior: smooth;
   overscroll-behavior: none;
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 body {
   background: #f4f5fb;
   transition: background 0.3s ease;
+  width: 100%;
+}
+
+#root {
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 body.dark {

@@ -226,9 +226,9 @@ function BusinessCard({ profile, preview = false, isConnection = false }: Busine
         </div>
 
         {/* ===== FOOTER ===== */}
-        <div className="mt-2 text-center shrink-0 animate-fade-in" style={{ animationDelay: '0.3s' }}>
-          <div className="flex items-center justify-center gap-1">
-            <MapPin className="w-3 h-3 text-gray-400" />
+        <div className="mt-2 px-2 text-center shrink-0 animate-fade-in" style={{ animationDelay: '0.3s' }}>
+          <div className="flex flex-wrap items-center justify-center gap-1 min-w-0">
+            <MapPin className="w-3 h-3 text-gray-400 shrink-0" />
             <p className={`text-[11px] font-semibold ${dark ? 'text-gray-400' : 'text-gray-500'}`}>{profile.city}</p>
             <span className="text-gray-600 mx-0.5">·</span>
             <p className={`text-[11px] font-medium tracking-wide uppercase ${dark ? 'text-gray-500' : 'text-gray-400'}`}>
