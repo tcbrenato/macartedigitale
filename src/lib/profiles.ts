@@ -25,6 +25,7 @@ interface ProfileRow {
   theme_secondary: string;
   services: ProfileService[];
   social: ProfileSocialLinks;
+  qr_code_url: string | null;
 }
 
 function fromRow(row: ProfileRow): Profile {
@@ -52,6 +53,7 @@ function fromRow(row: ProfileRow): Profile {
     themeSecondary: row.theme_secondary,
     services: row.services,
     social: row.social,
+    qrCodeUrl: row.qr_code_url ?? undefined,
   };
 }
 
@@ -79,6 +81,7 @@ function toRow(profile: Omit<Profile, 'id'>) {
     theme_secondary: profile.themeSecondary,
     services: profile.services,
     social: profile.social,
+    qr_code_url: profile.qrCodeUrl ?? null,
   };
 }
 

@@ -50,4 +50,7 @@ export interface Profile {
 
   services: ProfileService[];
   social: ProfileSocialLinks;
+
+  /** Set once the QR code has been generated (on first publish). */
+  qrCodeUrl?: string;
 }
