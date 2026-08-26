@@ -2,12 +2,16 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import BusinessCard from '@/components/BusinessCard';
 import { getPublishedProfileBySlug } from '@/lib/profiles';
+import { getConnectionStatusWith } from '@/lib/connections';
+import { useAuth } from '@/lib/auth';
 import type { Profile } from '@/types/profile';
 import NotFound from './NotFound';
 
 function ProfilePage() {
   const { slug } = useParams<{ slug: string }>();
+  const { user } = useAuth();
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [isConnection, setIsConnection] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -19,9 +23,20 @@ function ProfilePage() {
     let cancelled = false;
     setLoading(true);
     setError(null);
+    setIsConnection(false);
+
     getPublishedProfileBySlug(slug)
-      .then((result) => {
-        if (!cancelled) setProfile(result);
+      .then(async (result) => {
+        if (cancelled) return;
+        setProfile(result);
+        if (result?.userId && user && user.id !== result.userId) {
+          try {
+            const conn = await getConnectionStatusWith(user.id, result.userId);
+            if (!cancelled) setIsConnection(conn?.status === 'accepted');
+          } catch {
+            // Non-fatal: worst case, private fields just stay hidden.
+          }
+        }
       })
       .catch((err) => {
         if (!cancelled) setError(err instanceof Error ? err.message : 'Une erreur est survenue.');
@@ -32,7 +47,7 @@ function ProfilePage() {
     return () => {
       cancelled = true;
     };
-  }, [slug]);
+  }, [slug, user]);
 
   if (loading) {
     return (
@@ -56,7 +71,7 @@ function ProfilePage() {
 
   return (
     <div className="h-[100dvh] w-full">
-      <BusinessCard profile={profile} />
+      <BusinessCard profile={profile} isConnection={isConnection} />
     </div>
   );
 }

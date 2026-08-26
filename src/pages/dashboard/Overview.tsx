@@ -1,8 +1,9 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useOutletContext, useNavigate } from 'react-router-dom';
-import { Pencil, QrCode, ExternalLink, CreditCard, ChevronRight, ShieldCheck } from 'lucide-react';
+import { Pencil, QrCode, ExternalLink, CreditCard, ChevronRight, ShieldCheck, Compass, UserCheck } from 'lucide-react';
 import { useAuth } from '@/lib/auth';
 import { isAdmin } from '@/lib/admin';
+import { getPendingIncomingCount } from '@/lib/connections';
 import type { DashboardContext } from './DashboardLayout';
 
 const REQUIRED_FIELD_GETTERS: ((d: DashboardContext['draft']) => boolean)[] = [
@@ -78,6 +79,14 @@ function Overview() {
   const { draft } = useOutletContext<DashboardContext>();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [pendingCount, setPendingCount] = useState(0);
+
+  useEffect(() => {
+    if (!user) return;
+    getPendingIncomingCount(user.id)
+      .then(setPendingCount)
+      .catch(() => {});
+  }, [user]);
 
   const progress = useMemo(() => {
     const filled = REQUIRED_FIELD_GETTERS.filter((check) => check(draft)).length;
@@ -132,6 +141,21 @@ function Overview() {
             color={draft.themePrimary}
           />
         )}
+        <AccessCard
+          icon={Compass}
+          title="Annuaire"
+          desc="Découvrir et se connecter aux autres membres"
+          onClick={() => navigate('/dashboard/directory')}
+          color={draft.themePrimary}
+        />
+        <AccessCard
+          icon={UserCheck}
+          title="Connexions"
+          desc="Demandes reçues, envoyées, et tes connexions"
+          onClick={() => navigate('/dashboard/connections')}
+          badge={pendingCount > 0 ? String(pendingCount) : undefined}
+          color={draft.themePrimary}
+        />
         <AccessCard
           icon={CreditCard}
           title="Commander une carte RFID"

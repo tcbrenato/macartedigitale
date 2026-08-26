@@ -1,10 +1,25 @@
 import { useEffect, useState, type ChangeEvent, type CSSProperties } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { LayoutGrid, Pencil, QrCode, LogOut, Menu, X, CreditCard, ShieldCheck, ChevronsLeft, ChevronsRight, Users } from 'lucide-react';
+import {
+  LayoutGrid,
+  Pencil,
+  QrCode,
+  LogOut,
+  Menu,
+  X,
+  CreditCard,
+  ShieldCheck,
+  ChevronsLeft,
+  ChevronsRight,
+  Users,
+  Compass,
+  UserCheck,
+} from 'lucide-react';
 import { useAuth } from '@/lib/auth';
 import { supabase } from '@/lib/supabase';
 import { getMyProfile, saveProfile, uploadPhoto } from '@/lib/profiles';
 import { generateAndUploadQrCode } from '@/lib/qrcode';
+import { getPendingIncomingCount } from '@/lib/connections';
 import { isAdmin } from '@/lib/admin';
 import type { Profile } from '@/types/profile';
 
@@ -56,6 +71,7 @@ const NAV_ITEMS = [
   { to: '/dashboard', label: 'Accueil', icon: LayoutGrid, end: true },
   { to: '/dashboard/edit', label: 'Modifier ma carte', icon: Pencil, end: false },
   { to: '/dashboard/qrcode', label: 'QR Code', icon: QrCode, end: false },
+  { to: '/dashboard/directory', label: 'Annuaire', icon: Compass, end: false },
   { to: '/dashboard/rfid', label: 'Commander une carte RFID', icon: CreditCard, end: false },
 ];
 
@@ -70,6 +86,7 @@ function DashboardLayout() {
   const [error, setError] = useState<string | null>(null);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(() => localStorage.getItem('dashboard-sidebar-collapsed') === '1');
+  const [pendingCount, setPendingCount] = useState(0);
 
   useEffect(() => {
     localStorage.setItem('dashboard-sidebar-collapsed', collapsed ? '1' : '0');
@@ -81,6 +98,9 @@ function DashboardLayout() {
       .then((existing) => setDraft(existing ?? emptyProfile(user.id, user.email ?? '')))
       .catch((err) => setError(err instanceof Error ? err.message : 'Une erreur est survenue.'))
       .finally(() => setLoading(false));
+    getPendingIncomingCount(user.id)
+      .then(setPendingCount)
+      .catch(() => {});
   }, [user]);
 
   const handlePhotoChange = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -152,7 +172,7 @@ function DashboardLayout() {
   const dashStyle = { '--dash-brand': draft.themePrimary } as CSSProperties;
 
   const navLinkClass = (isActive: boolean, isCollapsed: boolean) =>
-    `flex items-center gap-3 rounded-xl text-sm font-semibold transition-colors ${
+    `relative flex items-center gap-3 rounded-xl text-sm font-semibold transition-colors ${
       isCollapsed ? 'justify-center px-0 py-2.5' : 'px-3.5 py-2.5'
     } ${isActive ? 'text-white' : 'text-gray-600 hover:bg-gray-100'}`;
 
@@ -183,6 +203,31 @@ function DashboardLayout() {
             {!isCollapsed && label}
           </NavLink>
         ))}
+        <NavLink
+          to="/dashboard/connections"
+          title={isCollapsed ? 'Connexions' : undefined}
+          onClick={() => setMobileNavOpen(false)}
+          className={({ isActive }) => navLinkClass(isActive, isCollapsed)}
+          style={({ isActive }) => (isActive ? { backgroundColor: draft.themePrimary } : undefined)}
+        >
+          <UserCheck className="w-4 h-4 shrink-0" />
+          {!isCollapsed && (
+            <span className="flex items-center gap-1.5 flex-1">
+              Connexions
+              {pendingCount > 0 && (
+                <span
+                  className="ml-auto text-[10px] font-bold text-white rounded-full w-[18px] h-[18px] flex items-center justify-center shrink-0"
+                  style={{ backgroundColor: draft.themePrimary }}
+                >
+                  {pendingCount}
+                </span>
+              )}
+            </span>
+          )}
+          {isCollapsed && pendingCount > 0 && (
+            <span className="absolute top-1.5 right-3.5 w-2 h-2 rounded-full bg-red-500" />
+          )}
+        </NavLink>
         {isAdmin(user?.email) && (
           <>
             <NavLink

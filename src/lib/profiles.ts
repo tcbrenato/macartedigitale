@@ -170,6 +170,34 @@ export async function getProfileById(id: string): Promise<Profile | null> {
   return data ? fromRow(data as ProfileRow) : null;
 }
 
+export async function getProfilesByUserIds(userIds: string[]): Promise<Profile[]> {
+  if (userIds.length === 0) return [];
+  const { data, error } = await supabase.from('profiles').select('*').in('user_id', userIds);
+
+  if (error) throw error;
+  return (data as ProfileRow[]).map(fromRow);
+}
+
+export async function searchDirectory(query: string, excludeUserId?: string): Promise<Profile[]> {
+  let q = supabase.from('profiles').select('*').eq('status', 'published').eq('visibility', 'public');
+
+  if (excludeUserId) {
+    q = q.neq('user_id', excludeUserId);
+  }
+
+  const trimmed = query.trim();
+  if (trimmed) {
+    const term = `%${trimmed}%`;
+    q = q.or(
+      `first_name.ilike.${term},last_name.ilike.${term},organization.ilike.${term},title.ilike.${term},city.ilike.${term},slug.ilike.${term}`
+    );
+  }
+
+  const { data, error } = await q.order('first_name', { ascending: true }).limit(50);
+  if (error) throw error;
+  return (data as ProfileRow[]).map(fromRow);
+}
+
 export async function uploadPhoto(userId: string, file: File): Promise<string> {
   const ext = file.name.split('.').pop() ?? 'png';
   const path = `${userId}/photo-${Date.now()}.${ext}`;

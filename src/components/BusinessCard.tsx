@@ -26,6 +26,8 @@ interface BusinessCardProps {
   profile: Profile;
   /** True when rendered inside the dashboard's live-preview panel, not as the public page. */
   preview?: boolean;
+  /** True when the viewer is an accepted connection of the profile owner — unlocks private fields. */
+  isConnection?: boolean;
 }
 
 const SOCIAL_ICONS = {
@@ -36,7 +38,7 @@ const SOCIAL_ICONS = {
   youtube: Youtube,
 } as const;
 
-function BusinessCard({ profile, preview = false }: BusinessCardProps) {
+function BusinessCard({ profile, preview = false, isConnection = false }: BusinessCardProps) {
   const [saved, setSaved] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
   const [dark, setDark] = useState(false);
@@ -61,22 +63,26 @@ function BusinessCard({ profile, preview = false }: BusinessCardProps) {
     document.title = `${profile.firstName} ${profile.lastName} | Carte de visite digitale`;
   }, [profile.firstName, profile.lastName, preview]);
 
+  const phoneVisible = profile.phonePublic || isConnection;
+  const emailVisible = profile.emailPublic || isConnection;
+  const addressVisible = profile.addressPublic || isConnection;
+
   const handleSave = () => {
     downloadVCard({
       firstName: profile.firstName,
       lastName: profile.lastName,
       organization: profile.organization,
       title: profile.title,
-      phone: profile.phonePublic ? profile.phone : undefined,
-      email: profile.emailPublic ? profile.email : undefined,
+      phone: phoneVisible ? profile.phone : undefined,
+      email: emailVisible ? profile.email : undefined,
       url: profile.url,
-      address: profile.addressPublic ? profile.address : undefined,
+      address: addressVisible ? profile.address : undefined,
     });
     setSaved(true);
     setTimeout(() => setSaved(false), 2500);
   };
 
-  const contactCount = (profile.phonePublic ? 2 : 0) + (profile.emailPublic ? 1 : 0) + (profile.url ? 1 : 0);
+  const contactCount = (phoneVisible ? 2 : 0) + (emailVisible ? 1 : 0) + (profile.url ? 1 : 0);
   const contactGridClass =
     contactCount >= 4 ? 'grid-cols-4' : contactCount === 3 ? 'grid-cols-3' : contactCount === 2 ? 'grid-cols-2' : 'grid-cols-1';
 
@@ -142,7 +148,7 @@ function BusinessCard({ profile, preview = false }: BusinessCardProps) {
                 </h3>
               </div>
               <div className={`grid ${contactGridClass} gap-2`}>
-                {profile.phonePublic && (
+                {phoneVisible && (
                   <>
                     <a href={`tel:${profile.phoneRaw}`} className="contact-btn flex flex-col items-center gap-1 group">
                       <div className="w-9 h-9 rounded-xl bg-[var(--brand)] flex items-center justify-center group-hover:bg-[var(--brand-dark)]">
@@ -158,7 +164,7 @@ function BusinessCard({ profile, preview = false }: BusinessCardProps) {
                     </a>
                   </>
                 )}
-                {profile.emailPublic && (
+                {emailVisible && (
                   <a href={`mailto:${profile.email}`} className="contact-btn flex flex-col items-center gap-1 group">
                     <div className="w-9 h-9 rounded-xl bg-[var(--brand)] flex items-center justify-center group-hover:bg-[var(--brand-dark)]">
                       <Mail className="w-4 h-4 text-white" />

@@ -10,6 +10,8 @@ import RfidOrder from '@/pages/dashboard/RfidOrder';
 import AdminRfidOrders from '@/pages/dashboard/AdminRfidOrders';
 import AdminProfiles from '@/pages/dashboard/AdminProfiles';
 import AdminEditProfile from '@/pages/dashboard/AdminEditProfile';
+import Directory from '@/pages/dashboard/Directory';
+import Connections from '@/pages/dashboard/Connections';
 import ProfilePage from '@/pages/ProfilePage';
 import NotFound from '@/pages/NotFound';
 import RequireAuth from '@/components/RequireAuth';
@@ -33,6 +35,8 @@ function App() {
         <Route path="edit" element={<EditCard />} />
         <Route path="qrcode" element={<QrCode />} />
         <Route path="rfid" element={<RfidOrder />} />
+        <Route path="directory" element={<Directory />} />
+        <Route path="connections" element={<Connections />} />
         <Route
           path="admin/rfid"
           element={
