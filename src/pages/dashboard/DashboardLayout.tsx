@@ -1,4 +1,4 @@
-import { useEffect, useState, type ChangeEvent, type CSSProperties } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import {
   LayoutGrid,
@@ -156,16 +156,22 @@ function DashboardLayout() {
 
   if (loading) {
     return (
-      <div className="h-[100dvh] w-full flex items-center justify-center text-sm text-gray-400">
-        Chargement…
+      <div className="min-h-[100dvh] w-full flex items-center justify-center p-6 bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50 relative overflow-hidden text-sm text-gray-500 font-medium">
+        <div className="absolute -top-24 -left-24 w-80 h-80 border-[35px] border-[#0100AD]/5 rounded-full pointer-events-none" />
+        <div className="absolute -bottom-24 -right-24 w-96 h-96 border-[45px] border-[#0100AD]/5 rounded-full pointer-events-none" />
+        <span className="relative z-10">Chargement…</span>
       </div>
     );
   }
 
   if (!draft) {
     return (
-      <div className="h-[100dvh] w-full flex items-center justify-center p-6 text-center text-sm text-red-600">
-        {error ?? 'Une erreur est survenue.'}
+      <div className="min-h-[100dvh] w-full flex items-center justify-center p-6 bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50 relative overflow-hidden">
+        <div className="absolute -top-24 -left-24 w-80 h-80 border-[35px] border-[#0100AD]/5 rounded-full pointer-events-none" />
+        <div className="absolute -bottom-24 -right-24 w-96 h-96 border-[45px] border-[#0100AD]/5 rounded-full pointer-events-none" />
+        <div className="w-full max-w-[420px] bg-white rounded-3xl shadow-2xl border border-gray-100 p-8 text-center relative z-10">
+          <p className="text-sm text-red-600 font-medium">{error ?? 'Une erreur est survenue.'}</p>
+        </div>
       </div>
     );
   }
@@ -173,23 +179,23 @@ function DashboardLayout() {
   const dashStyle = { '--dash-brand': draft.themePrimary } as CSSProperties;
 
   const navLinkClass = (isActive: boolean, isCollapsed: boolean) =>
-    `relative flex items-center gap-3 rounded-xl text-sm font-semibold transition-colors ${
-      isCollapsed ? 'justify-center px-0 py-2.5' : 'px-3.5 py-2.5'
-    } ${isActive ? 'text-white' : 'text-gray-600 hover:bg-gray-100'}`;
+    `relative flex items-center gap-3 rounded-2xl text-sm font-semibold transition-all ${
+      isCollapsed ? 'justify-center px-0 py-3' : 'px-4 py-3'
+    } ${isActive ? 'text-white shadow-md shadow-[#0100AD]/20' : 'text-gray-600 hover:bg-gray-100/80'}`;
 
   const renderSidebarContent = (isCollapsed: boolean) => (
     <>
-      <div className={`mb-4 flex items-center ${isCollapsed ? 'justify-center' : 'justify-between px-3.5'}`}>
-        {!isCollapsed && <h1 className="text-sm font-extrabold text-gray-900">Mon tableau de bord</h1>}
+      <div className={`mb-6 flex items-center ${isCollapsed ? 'justify-center' : 'justify-between px-3'}`}>
+        {!isCollapsed && <h1 className="text-sm font-black text-gray-900 tracking-tight">Tableau de bord</h1>}
         <button
           onClick={() => setCollapsed((c) => !c)}
-          className="hidden lg:flex w-7 h-7 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-700"
+          className="hidden lg:flex w-8 h-8 items-center justify-center rounded-xl text-gray-400 hover:bg-gray-100 hover:text-gray-700 transition-colors"
           title={isCollapsed ? 'Déplier' : 'Replier'}
         >
           {isCollapsed ? <ChevronsRight className="w-4 h-4" /> : <ChevronsLeft className="w-4 h-4" />}
         </button>
       </div>
-      <nav className="flex flex-col gap-1 flex-1">
+      <nav className="flex flex-col gap-1.5 flex-1">
         {NAV_ITEMS.map(({ to, label, icon: Icon, end }) => (
           <NavLink
             key={to}
@@ -217,7 +223,7 @@ function DashboardLayout() {
               Connexions
               {pendingCount > 0 && (
                 <span
-                  className="ml-auto text-[10px] font-bold text-white rounded-full w-[18px] h-[18px] flex items-center justify-center shrink-0"
+                  className="ml-auto text-[10px] font-bold text-white rounded-full w-[18px] h-[18px] flex items-center justify-center shrink-0 shadow-sm"
                   style={{ backgroundColor: draft.themePrimary }}
                 >
                   {pendingCount}
@@ -226,11 +232,15 @@ function DashboardLayout() {
             </span>
           )}
           {isCollapsed && pendingCount > 0 && (
-            <span className="absolute top-1.5 right-3.5 w-2 h-2 rounded-full bg-red-500" />
+            <span className="absolute top-2 right-3 w-2 h-2 rounded-full bg-red-500 shadow-sm" />
           )}
         </NavLink>
         {isAdmin(user?.email) && (
           <>
+            <div className="pt-3 pb-1">
+              {!isCollapsed && <span className="px-3 text-[10px] font-bold uppercase tracking-wider text-gray-400">Admin</span>}
+              {isCollapsed && <div className="border-t border-gray-100 my-2" />}
+            </div>
             <NavLink
               to="/dashboard/admin/profiles"
               title={isCollapsed ? 'Gérer les cartes (admin)' : undefined}
@@ -239,7 +249,7 @@ function DashboardLayout() {
               style={({ isActive }) => (isActive ? { backgroundColor: draft.themePrimary } : undefined)}
             >
               <Users className="w-4 h-4 shrink-0" />
-              {!isCollapsed && 'Gérer les cartes (admin)'}
+              {!isCollapsed && 'Gérer les cartes'}
             </NavLink>
             <NavLink
               to="/dashboard/admin/rfid"
@@ -249,7 +259,7 @@ function DashboardLayout() {
               style={({ isActive }) => (isActive ? { backgroundColor: draft.themePrimary } : undefined)}
             >
               <ShieldCheck className="w-4 h-4 shrink-0" />
-              {!isCollapsed && 'Commandes RFID (admin)'}
+              {!isCollapsed && 'Commandes RFID'}
             </NavLink>
             <NavLink
               to="/dashboard/admin/contact"
@@ -259,62 +269,68 @@ function DashboardLayout() {
               style={({ isActive }) => (isActive ? { backgroundColor: draft.themePrimary } : undefined)}
             >
               <Mail className="w-4 h-4 shrink-0" />
-              {!isCollapsed && 'Messages (admin)'}
+              {!isCollapsed && 'Messages'}
             </NavLink>
           </>
         )}
       </nav>
-      <button
-        onClick={handleLogout}
-        title={isCollapsed ? 'Déconnexion' : undefined}
-        className={`flex items-center gap-3 rounded-xl text-sm font-semibold text-gray-500 hover:bg-gray-100 ${
-          isCollapsed ? 'justify-center px-0 py-2.5' : 'px-3.5 py-2.5'
-        }`}
-      >
-        <LogOut className="w-4 h-4 shrink-0" /> {!isCollapsed && 'Déconnexion'}
-      </button>
-      {!isCollapsed && (
-        <div className="flex items-center justify-center gap-2.5 px-3.5 pt-2 text-[10px] text-gray-400">
-          <a href="/confidentialite" target="_blank" rel="noopener noreferrer" className="hover:text-gray-600">
-            Confidentialité
-          </a>
-          <span>·</span>
-          <a href="/cgu" target="_blank" rel="noopener noreferrer" className="hover:text-gray-600">
-            CGU
-          </a>
-        </div>
-      )}
+      <div className="pt-4 border-t border-gray-100 flex flex-col gap-2">
+        <button
+          onClick={handleLogout}
+          title={isCollapsed ? 'Déconnexion' : undefined}
+          className={`flex items-center gap-3 rounded-2xl text-sm font-semibold text-gray-500 hover:bg-red-50 hover:text-red-600 transition-all ${
+            isCollapsed ? 'justify-center px-0 py-3' : 'px-4 py-3'
+          }`}
+        >
+          <LogOut className="w-4 h-4 shrink-0" /> {!isCollapsed && 'Déconnexion'}
+        </button>
+        {!isCollapsed && (
+          <div className="flex items-center justify-center gap-2 px-2 pt-2 text-[11px] text-gray-400 font-medium">
+            <a href="/confidentialite" target="_blank" rel="noopener noreferrer" className="hover:text-gray-600 transition-colors">
+              Confidentialité
+            </a>
+            <span>·</span>
+            <a href="/cgu" target="_blank" rel="noopener noreferrer" className="hover:text-gray-600 transition-colors">
+              CGU
+            </a>
+          </div>
+        )}
+      </div>
     </>
   );
 
   return (
-    <div className="min-h-[100dvh] w-full bg-[#F9FAFB] flex" style={dashStyle}>
+    <div className="min-h-[100dvh] w-full bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50 flex relative overflow-x-hidden" style={dashStyle}>
+      {/* Éléments décoratifs en arrière-plan (anneaux / cercles) */}
+      <div className="absolute -top-24 -left-24 w-80 h-80 border-[35px] border-[#0100AD]/5 rounded-full pointer-events-none" />
+      <div className="absolute -bottom-24 -right-24 w-96 h-96 border-[45px] border-[#0100AD]/5 rounded-full pointer-events-none" />
+
       {/* ===== DESKTOP SIDEBAR ===== */}
       <aside
-        className={`hidden lg:flex flex-col shrink-0 border-r border-gray-200 bg-white p-4 transition-[width] duration-200 ${
-          collapsed ? 'w-[72px]' : 'w-60'
+        className={`hidden lg:flex flex-col shrink-0 border-r border-gray-100 bg-white/80 backdrop-blur-xl p-5 transition-[width] duration-300 relative z-20 shadow-sm ${
+          collapsed ? 'w-[84px]' : 'w-68'
         }`}
       >
         {renderSidebarContent(collapsed)}
       </aside>
 
       {/* ===== MOBILE HEADER + DRAWER ===== */}
-      <div className="lg:hidden fixed top-0 inset-x-0 z-30 flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-white">
-        <h1 className="text-sm font-extrabold text-gray-900">Mon tableau de bord</h1>
-        <button onClick={() => setMobileNavOpen(true)} className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-100">
-          <Menu className="w-5 h-5 text-gray-700" />
+      <div className="lg:hidden fixed top-0 inset-x-0 z-30 flex items-center justify-between px-5 py-3.5 border-b border-gray-100 bg-white/80 backdrop-blur-xl shadow-sm">
+        <h1 className="text-sm font-black text-gray-900 tracking-tight">Tableau de bord</h1>
+        <button onClick={() => setMobileNavOpen(true)} className="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-50 border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors">
+          <Menu className="w-5 h-5" />
         </button>
       </div>
       {mobileNavOpen && (
         <div className="lg:hidden fixed inset-0 z-40 flex" onClick={() => setMobileNavOpen(false)}>
-          <div className="absolute inset-0 bg-black/40" />
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-xs" />
           <div
-            className="relative w-64 bg-white h-full p-4 flex flex-col animate-fade-in-up"
+            className="relative w-72 bg-white h-full p-5 flex flex-col shadow-2xl transition-transform animate-in slide-in-from-left duration-200"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => setMobileNavOpen(false)}
-              className="self-end w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 mb-2"
+              className="self-end w-9 h-9 flex items-center justify-center rounded-xl bg-gray-100 text-gray-700 mb-4 hover:bg-gray-200 transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
@@ -324,7 +340,7 @@ function DashboardLayout() {
       )}
 
       {/* ===== MAIN CONTENT ===== */}
-      <main className="flex-1 min-w-0 pt-16 lg:pt-0">
+      <main className="flex-1 min-w-0 pt-16 lg:pt-0 relative z-10 flex flex-col">
         <Outlet
           context={
             {

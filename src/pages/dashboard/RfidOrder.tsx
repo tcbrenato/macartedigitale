@@ -57,7 +57,7 @@ function RfidOrder() {
   };
 
   return (
-    <div className="max-w-xl mx-auto px-4 sm:px-8 py-6 flex flex-col gap-6">
+    <div className="max-w-xl mx-auto px-4 sm:px-8 py-8 flex flex-col gap-6">
       <div>
         <h2 className="text-lg font-extrabold text-gray-900">Commander une carte RFID</h2>
         <p className="text-sm text-gray-500 mt-1">
@@ -66,19 +66,19 @@ function RfidOrder() {
       </div>
 
       {!draft.id ? (
-        <div className="bg-white rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] p-6 text-center">
-          <p className="text-sm text-gray-500">
+        <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-sm border border-gray-100 p-6 text-center">
+          <p className="text-sm text-gray-500 font-medium">
             Enregistre d'abord ta carte (dans "Modifier ma carte") avant de commander.
           </p>
         </div>
       ) : (
-        <div className="bg-white rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] p-5 flex flex-col gap-4">
+        <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-sm border border-gray-100 p-6 flex flex-col gap-4">
           <div>
             <label className="text-xs font-semibold text-gray-600">Quantité</label>
             <input
               type="number"
               min={1}
-              className="w-full min-h-[48px] rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm outline-none mt-1.5 focus:border-[var(--dash-brand)] focus:ring-2 focus:ring-[var(--dash-brand)]/15"
+              className="w-full min-h-[48px] rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm outline-none mt-1.5 focus:border-[var(--dash-brand)] focus:ring-2 focus:ring-[var(--dash-brand)]/15 shadow-2xs transition-all"
               value={quantity}
               onChange={(e) => setQuantity(Math.max(1, Number(e.target.value)))}
             />
@@ -87,18 +87,27 @@ function RfidOrder() {
             <label className="text-xs font-semibold text-gray-600">Précisions (design, matériaux, délai...)</label>
             <textarea
               rows={4}
-              className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm outline-none mt-1.5 focus:border-[var(--dash-brand)] focus:ring-2 focus:ring-[var(--dash-brand)]/15"
+              className="w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm outline-none mt-1.5 focus:border-[var(--dash-brand)] focus:ring-2 focus:ring-[var(--dash-brand)]/15 shadow-2xs transition-all"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Ex : fond noir mat avec logo doré..."
             />
           </div>
-          {error && <p className="text-xs text-red-600">{error}</p>}
-          {success && <p className="text-xs text-emerald-600">Demande envoyée !</p>}
+          {error && (
+            <div className="p-4 bg-red-50 border border-red-100 rounded-2xl text-xs text-red-600 font-medium">
+              {error}
+            </div>
+          )}
+          {success && (
+            <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-2xl text-xs text-emerald-600 font-medium">
+              Demande envoyée !
+            </div>
+          )}
           <button
+            type="button"
             onClick={handleSubmit}
             disabled={submitting}
-            className="min-h-[48px] flex items-center justify-center gap-2 disabled:opacity-60 text-white font-bold rounded-xl text-sm"
+            className="min-h-[48px] flex items-center justify-center gap-2 disabled:opacity-60 text-white font-bold rounded-2xl text-sm transition-all shadow-md hover:opacity-95"
             style={{ backgroundColor: draft.themePrimary }}
           >
             <Send className="w-4 h-4" /> {submitting ? 'Envoi…' : 'Envoyer ma demande'}
@@ -107,23 +116,23 @@ function RfidOrder() {
       )}
 
       {!loadingOrders && orders.length > 0 && (
-        <div>
-          <h3 className="text-xs font-bold uppercase tracking-wide text-gray-400 mb-2">Mes demandes</h3>
-          <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400">Mes demandes</h3>
+          <div className="flex flex-col gap-3">
             {orders.map((order) => (
               <div
                 key={order.id}
-                className="bg-white rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] p-4 flex items-center justify-between gap-3"
+                className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-sm border border-gray-100 p-5 flex items-center justify-between gap-3 transition-all"
               >
                 <div className="min-w-0">
-                  <p className="text-sm font-semibold text-gray-900">{order.quantity} carte(s)</p>
-                  {order.notes && <p className="text-xs text-gray-500 mt-0.5 truncate">{order.notes}</p>}
-                  <p className="text-[11px] text-gray-400 mt-1">
+                  <p className="text-sm font-bold text-gray-900">{order.quantity} carte(s)</p>
+                  {order.notes && <p className="text-xs text-gray-500 mt-0.5 truncate font-medium">{order.notes}</p>}
+                  <p className="text-[11px] text-gray-400 mt-1 font-medium">
                     {new Date(order.createdAt).toLocaleDateString('fr-FR')}
                   </p>
                 </div>
                 <span
-                  className="text-[10px] font-bold uppercase tracking-wide px-2 py-1 rounded-full shrink-0"
+                  className="text-[10px] font-bold uppercase tracking-wide px-3 py-1.5 rounded-full shrink-0"
                   style={{ backgroundColor: `${STATUS_COLORS[order.status]}1A`, color: STATUS_COLORS[order.status] }}
                 >
                   {STATUS_LABELS[order.status]}

@@ -69,26 +69,33 @@ function AdminEditProfile() {
   };
 
   if (loading) {
-    return <div className="px-4 sm:px-8 py-6 text-sm text-gray-400">Chargement…</div>;
+    return <div className="px-4 sm:px-8 py-8 text-sm text-gray-400 font-medium">Chargement…</div>;
   }
 
   if (!draft) {
     return (
-      <div className="px-4 sm:px-8 py-6 text-sm text-red-600">{error ?? 'Carte introuvable.'}</div>
+      <div className="max-w-6xl mx-auto px-4 sm:px-8 py-8">
+        <div className="p-4 bg-red-50 border border-red-100 rounded-2xl text-xs text-red-600 font-medium">
+          {error ?? 'Carte introuvable.'}
+        </div>
+      </div>
     );
   }
 
   return (
     <div>
-      <div className="max-w-6xl mx-auto px-4 sm:px-8 pt-6">
+      <div className="max-w-6xl mx-auto px-4 sm:px-8 pt-8 flex flex-col gap-2">
         <Link
           to="/dashboard/admin/profiles"
-          className="flex items-center gap-1.5 text-xs font-semibold text-gray-500 hover:text-gray-900 w-fit"
+          className="flex items-center gap-1.5 text-xs font-bold text-gray-500 hover:text-gray-950 w-fit transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" /> Retour à la liste
         </Link>
-        <p className="text-xs text-gray-400 mt-2">
-          Tu modifies la carte de <span className="font-semibold text-gray-600">{draft.firstName} {draft.lastName}</span>
+        <p className="text-xs text-gray-500 font-medium mt-1">
+          Tu modifies la carte de{' '}
+          <span className="font-bold text-gray-950">
+            {draft.firstName} {draft.lastName}
+          </span>
           {!draft.userId && ' — non réclamée pour l\'instant.'}
         </p>
       </div>

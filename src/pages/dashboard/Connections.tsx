@@ -21,17 +21,25 @@ function PersonRow({
 }) {
   const { otherProfile } = entry;
   return (
-    <div className="flex items-center gap-3 bg-white rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] p-4">
+    <div className="flex items-center gap-4 bg-white/80 backdrop-blur-xl rounded-3xl shadow-sm border border-gray-100 p-4 transition-all">
       {otherProfile ? (
-        <img src={otherProfile.photo} alt="" className="w-11 h-11 rounded-xl object-cover shrink-0" />
+        <img
+          src={otherProfile.photo}
+          alt=""
+          className="w-12 h-12 rounded-2xl object-cover shrink-0 border border-gray-100 shadow-2xs"
+        />
       ) : (
-        <div className="w-11 h-11 rounded-xl bg-gray-100 shrink-0" />
+        <div className="w-12 h-12 rounded-2xl bg-gray-100 shrink-0 border border-gray-100" />
       )}
       <div className="flex-1 min-w-0">
-        <h3 className="text-sm font-bold text-gray-900 truncate">
+        <h3 className="text-sm font-bold text-gray-950 truncate">
           {otherProfile ? `${otherProfile.firstName} ${otherProfile.lastName}` : 'Profil indisponible'}
         </h3>
-        {otherProfile && <p className="text-xs text-gray-500 truncate">{otherProfile.title || otherProfile.organization}</p>}
+        {otherProfile && (
+          <p className="text-xs text-gray-500 truncate mt-0.5 font-medium">
+            {otherProfile.title || otherProfile.organization}
+          </p>
+        )}
       </div>
       <div className="flex items-center gap-2 shrink-0">{children}</div>
     </div>
@@ -93,90 +101,113 @@ function Connections() {
   };
 
   if (loading) {
-    return <div className="px-4 sm:px-8 py-6 text-sm text-gray-400">Chargement…</div>;
+    return <div className="px-4 sm:px-8 py-8 text-sm text-gray-400 font-medium">Chargement…</div>;
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-8 py-6 flex flex-col gap-6">
+    <div className="max-w-3xl mx-auto px-4 sm:px-8 py-8 flex flex-col gap-8">
       <div>
-        <h2 className="text-lg font-extrabold text-gray-900">Connexions</h2>
+        <h2 className="text-xl font-black text-gray-950 tracking-tight">Connexions</h2>
         <p className="text-sm text-gray-500 mt-1">Gère tes demandes et tes connexions.</p>
       </div>
 
-      {error && <p className="text-xs text-red-600">{error}</p>}
+      {error && (
+        <div className="p-4 bg-red-50 border border-red-100 rounded-2xl text-xs text-red-600 font-medium">
+          {error}
+        </div>
+      )}
 
-      <section className="flex flex-col gap-2">
-        <h3 className="text-xs font-bold uppercase tracking-wide text-gray-400">
+      {/* Demandes reçues */}
+      <section className="flex flex-col gap-3">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400 px-1">
           Demandes reçues {incoming.length > 0 && `(${incoming.length})`}
         </h3>
         {incoming.length === 0 ? (
-          <p className="text-xs text-gray-400">Aucune demande en attente.</p>
+          <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-sm border border-gray-100 p-6 text-center">
+            <p className="text-xs text-gray-400 font-medium">Aucune demande en attente.</p>
+          </div>
         ) : (
-          incoming.map((entry) => (
-            <PersonRow key={entry.connection.id} entry={entry}>
-              <button
-                onClick={() => handleAccept(entry.connection.id)}
-                className="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-lg text-white"
-                style={{ backgroundColor: draft.themePrimary }}
-              >
-                <Check className="w-3.5 h-3.5" /> Accepter
-              </button>
-              <button
-                onClick={() => handleDecline(entry.connection.id)}
-                className="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200"
-              >
-                <X className="w-3.5 h-3.5" /> Refuser
-              </button>
-            </PersonRow>
-          ))
+          <div className="flex flex-col gap-3">
+            {incoming.map((entry) => (
+              <PersonRow key={entry.connection.id} entry={entry}>
+                <button
+                  type="button"
+                  onClick={() => handleAccept(entry.connection.id)}
+                  className="flex items-center gap-1.5 text-xs font-bold px-4 py-2.5 rounded-2xl text-white shadow-md hover:opacity-95 transition-all"
+                  style={{ backgroundColor: draft.themePrimary }}
+                >
+                  <Check className="w-3.5 h-3.5" /> Accepter
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDecline(entry.connection.id)}
+                  className="flex items-center gap-1.5 text-xs font-bold px-4 py-2.5 rounded-2xl bg-gray-100 hover:bg-gray-200 transition-all shadow-2xs text-gray-700"
+                >
+                  <X className="w-3.5 h-3.5" /> Refuser
+                </button>
+              </PersonRow>
+            ))}
+          </div>
         )}
       </section>
 
-      <section className="flex flex-col gap-2">
-        <h3 className="text-xs font-bold uppercase tracking-wide text-gray-400">Demandes envoyées</h3>
+      {/* Demandes envoyées */}
+      <section className="flex flex-col gap-3">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400 px-1">Demandes envoyées</h3>
         {outgoing.length === 0 ? (
-          <p className="text-xs text-gray-400">Aucune demande envoyée.</p>
+          <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-sm border border-gray-100 p-6 text-center">
+            <p className="text-xs text-gray-400 font-medium">Aucune demande envoyée.</p>
+          </div>
         ) : (
-          outgoing.map((entry) => (
-            <PersonRow key={entry.connection.id} entry={entry}>
-              <button
-                onClick={() => handleRemove(entry.connection.id)}
-                className="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200"
-              >
-                <UserMinus className="w-3.5 h-3.5" /> Annuler
-              </button>
-            </PersonRow>
-          ))
+          <div className="flex flex-col gap-3">
+            {outgoing.map((entry) => (
+              <PersonRow key={entry.connection.id} entry={entry}>
+                <button
+                  type="button"
+                  onClick={() => handleRemove(entry.connection.id)}
+                  className="flex items-center gap-1.5 text-xs font-bold px-4 py-2.5 rounded-2xl bg-gray-100 hover:bg-gray-200 transition-all shadow-2xs text-gray-700"
+                >
+                  <UserMinus className="w-3.5 h-3.5" /> Annuler
+                </button>
+              </PersonRow>
+            ))}
+          </div>
         )}
       </section>
 
-      <section className="flex flex-col gap-2">
-        <h3 className="text-xs font-bold uppercase tracking-wide text-gray-400">
+      {/* Mes connexions */}
+      <section className="flex flex-col gap-3">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400 px-1">
           Mes connexions {accepted.length > 0 && `(${accepted.length})`}
         </h3>
         {accepted.length === 0 ? (
-          <p className="text-xs text-gray-400">Aucune connexion pour l'instant.</p>
+          <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-sm border border-gray-100 p-6 text-center">
+            <p className="text-xs text-gray-400 font-medium">Aucune connexion pour l'instant.</p>
+          </div>
         ) : (
-          accepted.map((entry) => (
-            <PersonRow key={entry.connection.id} entry={entry}>
-              {entry.otherProfile && (
-                <a
-                  href={`/${entry.otherProfile.slug}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200"
+          <div className="flex flex-col gap-3">
+            {accepted.map((entry) => (
+              <PersonRow key={entry.connection.id} entry={entry}>
+                {entry.otherProfile && (
+                  <a
+                    href={`/${entry.otherProfile.slug}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 text-xs font-bold px-4 py-2.5 rounded-2xl bg-gray-100 hover:bg-gray-200 transition-all shadow-2xs text-gray-700"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" /> Voir la carte
+                  </a>
+                )}
+                <button
+                  type="button"
+                  onClick={() => handleRemove(entry.connection.id)}
+                  className="flex items-center gap-1.5 text-xs font-bold px-4 py-2.5 rounded-2xl bg-red-50 hover:bg-red-100 transition-all shadow-2xs text-red-600 border border-red-100"
                 >
-                  <ExternalLink className="w-3.5 h-3.5" /> Voir la carte
-                </a>
-              )}
-              <button
-                onClick={() => handleRemove(entry.connection.id)}
-                className="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-red-500"
-              >
-                <UserMinus className="w-3.5 h-3.5" /> Retirer
-              </button>
-            </PersonRow>
-          ))
+                  <UserMinus className="w-3.5 h-3.5" /> Retirer
+                </button>
+              </PersonRow>
+            ))}
+          </div>
         )}
       </section>
     </div>

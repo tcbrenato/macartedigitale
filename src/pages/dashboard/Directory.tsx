@@ -77,77 +77,93 @@ function Directory() {
   };
 
   if (loading) {
-    return <div className="px-4 sm:px-8 py-6 text-sm text-gray-400">Chargement…</div>;
+    return <div className="px-4 sm:px-8 py-8 text-sm text-gray-400 font-medium">Chargement…</div>;
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-8 py-6 flex flex-col gap-4">
+    <div className="max-w-3xl mx-auto px-4 sm:px-8 py-8 flex flex-col gap-6">
       <div>
-        <h2 className="text-lg font-extrabold text-gray-900">Annuaire</h2>
+        <h2 className="text-xl font-black text-gray-950 tracking-tight">Annuaire</h2>
         <p className="text-sm text-gray-500 mt-1">Découvre et connecte-toi aux autres membres de la plateforme.</p>
       </div>
 
       <div className="relative">
-        <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+        <Search className="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Rechercher par nom, titre, ville ou lien..."
-          className="w-full min-h-[48px] rounded-xl border border-gray-200 bg-white pl-10 pr-4 py-3 text-sm outline-none focus:border-gray-300"
+          className="w-full min-h-[48px] rounded-2xl border border-gray-200 bg-white/80 backdrop-blur-xl pl-11 pr-4 py-3 text-sm outline-none transition-all focus:border-[var(--dash-brand)] focus:ring-2 focus:ring-[var(--dash-brand)]/15 shadow-2xs"
         />
       </div>
 
-      {error && <p className="text-xs text-red-600">{error}</p>}
+      {error && (
+        <div className="p-4 bg-red-50 border border-red-100 rounded-2xl text-xs text-red-600 font-medium">
+          {error}
+        </div>
+      )}
 
       {results.length === 0 ? (
-        <p className="text-sm text-gray-400">Aucun résultat.</p>
+        <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-sm border border-gray-100 p-8 text-center">
+          <p className="text-sm text-gray-400 font-medium">Aucun résultat.</p>
+        </div>
       ) : (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3">
           {results.map((p) => {
             const conn = p.userId ? connectionByUserId.get(p.userId) : undefined;
             const busy = busyId === p.userId;
             return (
-              <div key={p.id} className="flex items-center gap-3 bg-white rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] p-4">
-                <img src={p.photo} alt="" className="w-11 h-11 rounded-xl object-cover shrink-0" />
+              <div
+                key={p.id}
+                className="flex items-center gap-4 bg-white/80 backdrop-blur-xl rounded-3xl shadow-sm border border-gray-100 p-4 transition-all"
+              >
+                <img
+                  src={p.photo}
+                  alt=""
+                  className="w-12 h-12 rounded-2xl object-cover shrink-0 border border-gray-100 shadow-2xs"
+                />
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-sm font-bold text-gray-900 truncate">
+                  <h3 className="text-sm font-bold text-gray-950 truncate">
                     {p.firstName} {p.lastName}
                   </h3>
-                  <p className="text-xs text-gray-500 truncate">
+                  <p className="text-xs text-gray-500 truncate mt-0.5 font-medium">
                     {p.title || p.organization}
                     {p.city ? ` · ${p.city}` : ''}
                   </p>
                 </div>
                 {!p.userId ? null : !conn ? (
                   <button
+                    type="button"
                     onClick={() => handleConnect(p.userId as string)}
                     disabled={busy}
-                    className="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 disabled:opacity-60 shrink-0"
+                    className="flex items-center gap-1.5 text-xs font-bold px-4 py-2.5 rounded-2xl bg-gray-100 hover:bg-gray-200 disabled:opacity-60 shrink-0 transition-all shadow-2xs"
                   >
                     <UserPlus className="w-3.5 h-3.5" /> Se connecter
                   </button>
                 ) : conn.status === 'accepted' ? (
-                  <span className="flex items-center gap-1.5 text-xs font-semibold text-emerald-600 shrink-0">
+                  <span className="flex items-center gap-1.5 text-xs font-bold text-emerald-600 shrink-0 px-3 py-1.5 bg-emerald-50 rounded-2xl border border-emerald-100">
                     <Check className="w-3.5 h-3.5" /> Connecté
                   </span>
                 ) : conn.status === 'pending' && conn.addresseeId === user?.id ? (
                   <button
+                    type="button"
                     onClick={() => handleAccept(conn.id, p.userId as string)}
                     disabled={busy}
-                    className="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-lg text-white disabled:opacity-60 shrink-0"
+                    className="flex items-center gap-1.5 text-xs font-bold px-4 py-2.5 rounded-2xl text-white disabled:opacity-60 shrink-0 transition-all shadow-md hover:opacity-95"
                     style={{ backgroundColor: draft.themePrimary }}
                   >
                     <Check className="w-3.5 h-3.5" /> Accepter
                   </button>
                 ) : conn.status === 'pending' ? (
-                  <span className="flex items-center gap-1.5 text-xs font-semibold text-gray-400 shrink-0">
+                  <span className="flex items-center gap-1.5 text-xs font-bold text-gray-400 shrink-0 px-3 py-1.5 bg-gray-50 rounded-2xl border border-gray-100">
                     <Clock className="w-3.5 h-3.5" /> Demande envoyée
                   </span>
                 ) : (
                   <button
+                    type="button"
                     onClick={() => handleConnect(p.userId as string)}
                     disabled={busy}
-                    className="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 disabled:opacity-60 shrink-0"
+                    className="flex items-center gap-1.5 text-xs font-bold px-4 py-2.5 rounded-2xl bg-gray-100 hover:bg-gray-200 disabled:opacity-60 shrink-0 transition-all shadow-2xs"
                   >
                     <UserPlus className="w-3.5 h-3.5" /> Se connecter
                   </button>

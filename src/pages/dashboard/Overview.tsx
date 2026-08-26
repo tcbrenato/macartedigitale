@@ -34,29 +34,29 @@ function AccessCard({ icon: Icon, title, desc, onClick, href, disabled, badge, c
   const inner = (
     <>
       <div
-        className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
+        className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-2xs transition-transform"
         style={{ backgroundColor: disabled ? '#F3F4F6' : `${color}1A`, color: disabled ? '#9CA3AF' : color }}
       >
         <Icon className="w-5 h-5" />
       </div>
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2">
-          <h3 className={`text-sm font-bold ${disabled ? 'text-gray-400' : 'text-gray-900'}`}>{title}</h3>
+        <div className="flex items-center gap-2 flex-wrap">
+          <h3 className={`text-sm font-bold ${disabled ? 'text-gray-400' : 'text-gray-950'}`}>{title}</h3>
           {badge && (
-            <span className="text-[10px] font-bold uppercase tracking-wide text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded-full">
+            <span className="text-[10px] font-bold uppercase tracking-wider bg-red-50 text-red-600 border border-red-100 px-2 py-0.5 rounded-full shrink-0">
               {badge}
             </span>
           )}
         </div>
-        <p className={`text-xs mt-0.5 ${disabled ? 'text-gray-300' : 'text-gray-500'}`}>{desc}</p>
+        <p className={`text-xs mt-1 font-medium ${disabled ? 'text-gray-300' : 'text-gray-500'}`}>{desc}</p>
       </div>
-      {!disabled && <ChevronRight className="w-4 h-4 text-gray-300 shrink-0" />}
+      {!disabled && <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-gray-500 shrink-0 transition-colors" />}
     </>
   );
 
   const className =
-    'flex items-center gap-3 bg-white rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] p-4 text-left transition-transform ' +
-    (disabled ? 'cursor-not-allowed' : 'hover:-translate-y-0.5 cursor-pointer');
+    'flex items-center gap-4 bg-white/80 backdrop-blur-xl rounded-3xl shadow-sm border border-gray-100 p-4 text-left transition-all ' +
+    (disabled ? 'cursor-not-allowed opacity-60' : 'hover:-translate-y-0.5 hover:shadow-md cursor-pointer group');
 
   if (disabled) {
     return <div className={className}>{inner}</div>;
@@ -69,7 +69,7 @@ function AccessCard({ icon: Icon, title, desc, onClick, href, disabled, badge, c
     );
   }
   return (
-    <button onClick={onClick} className={className}>
+    <button type="button" onClick={onClick} className={className}>
       {inner}
     </button>
   );
@@ -94,24 +94,26 @@ function Overview() {
   }, [draft]);
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-8 py-6 flex flex-col gap-6">
+    <div className="max-w-3xl mx-auto px-4 sm:px-8 py-8 flex flex-col gap-8">
       <div>
-        <h2 className="text-lg font-extrabold text-gray-900">
+        <h2 className="text-xl font-black text-gray-950 tracking-tight">
           Bonjour {draft.firstName || ''} 👋
         </h2>
-        <p className="text-sm text-gray-500 mt-1">
-          {draft.status === 'published' ? 'Ta carte est publiée et accessible en ligne.' : 'Ta carte est en brouillon — publie-la pour la partager.'}
+        <p className="text-sm text-gray-500 mt-1 font-medium">
+          {draft.status === 'published'
+            ? 'Ta carte est publiée et accessible en ligne.'
+            : 'Ta carte est en brouillon — publie-la pour la partager.'}
         </p>
       </div>
 
-      <div>
-        <div className="flex items-center justify-between text-xs font-semibold text-gray-500 mb-1.5">
+      <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-sm border border-gray-100 p-5 flex flex-col gap-2.5">
+        <div className="flex items-center justify-between text-xs font-bold text-gray-700">
           <span>Carte complétée</span>
-          <span>{progress}%</span>
+          <span style={{ color: draft.themePrimary }}>{progress}%</span>
         </div>
-        <div className="h-2 rounded-full bg-gray-200 overflow-hidden">
+        <div className="h-2.5 rounded-full bg-gray-100 overflow-hidden p-0.5 border border-gray-200/40">
           <div
-            className="h-full rounded-full transition-all duration-300"
+            className="h-full rounded-full transition-all duration-500 shadow-2xs"
             style={{ width: `${progress}%`, backgroundColor: draft.themePrimary }}
           />
         </div>
