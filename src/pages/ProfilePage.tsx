@@ -6,7 +6,7 @@ import { getConnectionStatusWith } from '@/lib/connections';
 import { useAuth } from '@/lib/auth';
 import type { Profile } from '@/types/profile';
 import NotFound from './NotFound';
-import { Zap, AlertCircle, Loader2 } from 'lucide-react';
+import { AlertCircle, Loader2 } from 'lucide-react';
 
 function ProfilePage() {
   const { slug } = useParams<{ slug: string }>();
@@ -94,7 +94,7 @@ function ProfilePage() {
   }
 
   return (
-    <div className="min-h-[100dvh] w-full bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50 relative">
+    <div className="h-[100dvh] w-full bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50 relative overflow-hidden">
       <BusinessCard profile={profile} isConnection={isConnection} />
     </div>
   );

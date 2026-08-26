@@ -51,7 +51,7 @@ function AdminContactMessages() {
             <div
               key={m.id}
               className={`bg-white/80 backdrop-blur-xl rounded-3xl shadow-sm border border-gray-100 p-5 flex flex-col gap-3 transition-all ${
-                m.opacity ?? (m.read ? 'opacity-60' : '')
+                m.read ? 'opacity-60' : ''
               }`}
             >
               <div className="flex items-start justify-between gap-3">

@@ -83,7 +83,7 @@ function Login() {
           <div className="flex flex-col gap-1.5">
             <div className="flex items-center justify-between">
               <label className="text-xs font-bold text-gray-700">Mot de passe</label>
-              <Link to="/forgot-password" classN="text-xs text-[#0100AD] font-semibold hover:underline">Mot de passe oublié ?</Link>
+              <Link to="/forgot-password" className="text-xs text-[#0100AD] font-semibold hover:underline">Mot de passe oublié ?</Link>
             </div>
             <div className="relative flex items-center">
               <Lock className="absolute left-3.5 w-4 h-4 text-gray-400" />
