@@ -125,7 +125,7 @@ function Landing() {
                 <div className="w-[450px] h-[450px] rounded-full bg-white"></div>
             </div>
             <video
-              src="/vidmcd.mp4"
+              src="/vidm2.mp4"
               autoPlay
               loop
               muted
@@ -175,7 +175,7 @@ function Landing() {
               className="w-full rounded-3xl shadow-xl object-cover aspect-[4/3]"
             />
             <video
-              src="/vidm2.mp4"
+              src="/vidmcd.mp4"
               autoPlay
               loop
               muted
