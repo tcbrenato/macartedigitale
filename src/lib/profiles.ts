@@ -182,7 +182,10 @@ export async function searchDirectory(query: string, excludeUserId?: string): Pr
   let q = supabase.from('profiles').select('*').eq('status', 'published').eq('visibility', 'public');
 
   if (excludeUserId) {
-    q = q.neq('user_id', excludeUserId);
+    // Plain .neq() would silently drop every unclaimed profile too: in SQL,
+    // `NULL <> 'uuid'` evaluates to NULL (not true), so those rows never match
+    // a WHERE clause. Explicitly keep NULL user_id rows alongside the exclusion.
+    q = q.or(`user_id.neq.${excludeUserId},user_id.is.null`);
   }
 
   const trimmed = query.trim();
