@@ -1,5 +1,22 @@
 import { supabase } from '@/lib/supabase';
-import type { Profile, ProfileService, ProfileSocialLinks, ProfileStatus, ProfileVisibility } from '@/types/profile';
+import type { Profile, ProfileService, ProfileSocialLinks, ProfileStatus, ProfileVisibility, TemplateId } from '@/types/profile';
+
+const VALID_TEMPLATE_IDS: TemplateId[] = [
+  'classic',
+  'minimal',
+  'dark',
+  'banner',
+  'split',
+  'corporate',
+  'creative',
+  'compact',
+  'elegant',
+  'social',
+];
+
+function toTemplateId(value: string): TemplateId {
+  return (VALID_TEMPLATE_IDS as string[]).includes(value) ? (value as TemplateId) : 'classic';
+}
 
 interface ProfileRow {
   id: string;
@@ -56,7 +73,7 @@ function fromRow(row: ProfileRow): Profile {
     countryLine: row.country_line,
     status: row.status,
     visibility: row.visibility ?? 'public',
-    templateId: row.template_id,
+    templateId: toTemplateId(row.template_id),
     themePrimary: row.theme_primary,
     themeSecondary: row.theme_secondary,
     services: row.services,

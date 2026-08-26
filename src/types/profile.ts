@@ -24,6 +24,18 @@ export type ProfileStatus = 'draft' | 'published';
  */
 export type ProfileVisibility = 'public' | 'link_only' | 'connections_only';
 
+export type TemplateId =
+  | 'classic'
+  | 'minimal'
+  | 'dark'
+  | 'banner'
+  | 'split'
+  | 'corporate'
+  | 'creative'
+  | 'compact'
+  | 'elegant'
+  | 'social';
+
 export interface Profile {
   id: string;
   userId: string | null;
@@ -58,8 +70,7 @@ export interface Profile {
 
   status: ProfileStatus;
   visibility: ProfileVisibility;
-  /** Card design/layout. Only 'classic' exists today; more coming later. */
-  templateId: string;
+  templateId: TemplateId;
   themePrimary: string;
   themeSecondary: string;
 

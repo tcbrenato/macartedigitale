@@ -2,9 +2,47 @@ import { useMemo, useState, type ReactNode } from 'react';
 import { Plus, Trash2, ExternalLink, CheckCircle2, Eye, Pencil, ChevronDown, Check } from 'lucide-react';
 import { derivePhoneFields } from '@/lib/phone';
 import { ICON_MAP, type IconName } from '@/lib/icons';
+import { useBusinessCardLogic } from '@/lib/useBusinessCardLogic';
+import { TEMPLATES } from '@/templates';
 import BusinessCard from '@/components/BusinessCard';
-import type { Profile, ProfileService, ProfileSocialLinks, ProfileVisibility } from '@/types/profile';
+import type { Profile, ProfileService, ProfileSocialLinks, ProfileVisibility, TemplateId } from '@/types/profile';
 import type { DashboardContext } from './DashboardLayout';
+
+function TemplatePicker({ draft, onSelect }: { draft: DashboardContext['draft']; onSelect: (id: TemplateId) => void }) {
+  const logic = useBusinessCardLogic({ profile: draft as Profile, preview: true });
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+      {TEMPLATES.map(({ id, name, desc, component: Template }) => {
+        const selected = draft.templateId === id;
+        return (
+          <button
+            key={id}
+            type="button"
+            onClick={() => onSelect(id)}
+            className="rounded-xl overflow-hidden border-2 text-left transition-colors"
+            style={selected ? { borderColor: 'var(--dash-brand)' } : { borderColor: '#E5E7EB' }}
+          >
+            <div className="relative w-full h-[190px] overflow-hidden bg-gray-100">
+              <div
+                className="absolute top-1/2 left-1/2"
+                style={{ width: 400, height: 820, transform: 'translate(-50%, -50%) scale(0.32)' }}
+              >
+                <Template profile={draft as Profile} logic={logic} />
+              </div>
+            </div>
+            <div className="p-2">
+              <p className="text-xs font-bold text-gray-900 flex items-center gap-1">
+                {name}
+                {selected && <Check className="w-3 h-3 shrink-0" style={{ color: 'var(--dash-brand)' }} />}
+              </p>
+              <p className="text-[10px] text-gray-400">{desc}</p>
+            </div>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
 
 const SOCIAL_FIELDS: { key: keyof ProfileSocialLinks; label: string }[] = [
   { key: 'facebook', label: 'Facebook' },
@@ -350,6 +388,10 @@ function ProfileForm({ draft, setDraft, saving, uploading, message, error, handl
         </div>
       </Card>
 
+      <Card title="Modèle de carte">
+        <TemplatePicker draft={draft} onSelect={(id) => update('templateId', id)} />
+      </Card>
+
       <Card title="Apparence">
         <div className="grid grid-cols-2 gap-4">
           <Field label="Couleur 1 (principale)">
@@ -369,11 +411,6 @@ function ProfileForm({ draft, setDraft, saving, uploading, message, error, handl
             />
           </Field>
         </div>
-        <Field label="Modèle de carte">
-          <select className={inputBase} value={draft.templateId} disabled>
-            <option value="classic">Classique (d'autres modèles arrivent bientôt)</option>
-          </select>
-        </Field>
       </Card>
 
       {error && <p className="text-xs text-red-600">{error}</p>}
