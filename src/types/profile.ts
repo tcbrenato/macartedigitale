@@ -34,11 +34,17 @@ export interface Profile {
   phone: string;
   phoneRaw: string;
   whatsapp: string;
+  /** Shows/hides the "Appeler" and "WhatsApp" buttons on the public card. */
+  phonePublic: boolean;
   email: string;
+  /** Shows/hides the "Email" button on the public card. */
+  emailPublic: boolean;
   /** Personal or company website. Omit to hide the "Site web" button. */
   url?: string;
 
   address: string;
+  /** Whether the address is included in the downloaded vCard. */
+  addressPublic: boolean;
   city: string;
   countryLine: string;
 

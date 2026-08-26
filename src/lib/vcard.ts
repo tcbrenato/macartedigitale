@@ -3,10 +3,10 @@ export interface VCardData {
   lastName: string;
   organization: string;
   title: string;
-  phone: string;
-  email: string;
+  phone?: string;
+  email?: string;
   url?: string;
-  address: string;
+  address?: string;
 }
 
 export function generateVCard(data: VCardData): string {
@@ -17,10 +17,10 @@ export function generateVCard(data: VCardData): string {
     `FN:${data.firstName} ${data.lastName}`,
     `ORG:${data.organization}`,
     `TITLE:${data.title}`,
-    `TEL;TYPE=CELL:${data.phone}`,
-    `EMAIL:${data.email}`,
+    data.phone ? `TEL;TYPE=CELL:${data.phone}` : null,
+    data.email ? `EMAIL:${data.email}` : null,
     data.url ? `URL:${data.url}` : null,
-    `ADR;TYPE=WORK:;;${data.address};;;`,
+    data.address ? `ADR;TYPE=WORK:;;${data.address};;;` : null,
     'END:VCARD',
   ]
     .filter((line): line is string => line !== null)

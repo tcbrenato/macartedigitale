@@ -54,6 +54,28 @@ function Card({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
+function VisibilityToggle({ checked, onChange }: { checked: boolean; onChange: (value: boolean) => void }) {
+  return (
+    <button
+      type="button"
+      onClick={() => onChange(!checked)}
+      className="flex items-center gap-2 text-xs text-gray-500 mt-1.5"
+    >
+      <span
+        className="w-9 h-5 rounded-full relative shrink-0 transition-colors"
+        style={{ backgroundColor: checked ? 'var(--dash-brand)' : '#E5E7EB' }}
+      >
+        <span
+          className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white transition-transform ${
+            checked ? 'translate-x-4' : ''
+          }`}
+        />
+      </span>
+      Visible publiquement sur ma carte
+    </button>
+  );
+}
+
 function EditCard() {
   const { draft, setDraft, saving, uploading, message, error, handleSave, handlePhotoChange } =
     useOutletContext<DashboardContext>();
@@ -179,6 +201,7 @@ function EditCard() {
             onChange={(e) => updatePhone(e.target.value)}
             placeholder="+229 01 92 37 77 77"
           />
+          <VisibilityToggle checked={draft.phonePublic} onChange={(v) => update('phonePublic', v)} />
         </Field>
         <p className="text-[11px] text-gray-400 -mt-2">
           Le lien d'appel et le lien WhatsApp sont générés automatiquement à partir de ce numéro.
@@ -186,6 +209,7 @@ function EditCard() {
 
         <Field label="Email" filled={Boolean(draft.email)}>
           <input type="email" className={inputBase} value={draft.email} onChange={(e) => update('email', e.target.value)} />
+          <VisibilityToggle checked={draft.emailPublic} onChange={(v) => update('emailPublic', v)} />
         </Field>
         <Field label="Site web (optionnel)">
           <input
@@ -207,6 +231,7 @@ function EditCard() {
         </div>
         <Field label="Adresse (utilisée pour le contact enregistré)">
           <input className={inputBase} value={draft.address} onChange={(e) => update('address', e.target.value)} />
+          <VisibilityToggle checked={draft.addressPublic} onChange={(v) => update('addressPublic', v)} />
         </Field>
       </Card>
 

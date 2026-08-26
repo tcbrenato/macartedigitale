@@ -67,14 +67,18 @@ function BusinessCard({ profile, preview = false }: BusinessCardProps) {
       lastName: profile.lastName,
       organization: profile.organization,
       title: profile.title,
-      phone: profile.phone,
-      email: profile.email,
+      phone: profile.phonePublic ? profile.phone : undefined,
+      email: profile.emailPublic ? profile.email : undefined,
       url: profile.url,
-      address: profile.address,
+      address: profile.addressPublic ? profile.address : undefined,
     });
     setSaved(true);
     setTimeout(() => setSaved(false), 2500);
   };
+
+  const contactCount = (profile.phonePublic ? 2 : 0) + (profile.emailPublic ? 1 : 0) + (profile.url ? 1 : 0);
+  const contactGridClass =
+    contactCount >= 4 ? 'grid-cols-4' : contactCount === 3 ? 'grid-cols-3' : contactCount === 2 ? 'grid-cols-2' : 'grid-cols-1';
 
   const themeStyle = {
     '--brand': profile.themePrimary,
@@ -129,42 +133,50 @@ function BusinessCard({ profile, preview = false }: BusinessCardProps) {
           </div>
 
           {/* ===== CONTACT DIRECT ===== */}
-          <div className="px-3 pt-2 pb-1 shrink-0">
-            <div className="flex items-center gap-1.5 mb-1.5">
-              <div className="w-0.5 h-3.5 rounded-full bg-[var(--brand)]" />
-              <h3 className={`text-[10px] font-bold tracking-wide uppercase ${darkLabel}`}>
-                Contact direct
-              </h3>
+          {contactCount > 0 && (
+            <div className="px-3 pt-2 pb-1 shrink-0">
+              <div className="flex items-center gap-1.5 mb-1.5">
+                <div className="w-0.5 h-3.5 rounded-full bg-[var(--brand)]" />
+                <h3 className={`text-[10px] font-bold tracking-wide uppercase ${darkLabel}`}>
+                  Contact direct
+                </h3>
+              </div>
+              <div className={`grid ${contactGridClass} gap-2`}>
+                {profile.phonePublic && (
+                  <>
+                    <a href={`tel:${profile.phoneRaw}`} className="contact-btn flex flex-col items-center gap-1 group">
+                      <div className="w-9 h-9 rounded-xl bg-[var(--brand)] flex items-center justify-center group-hover:bg-[var(--brand-dark)]">
+                        <Phone className="w-4 h-4 text-white" />
+                      </div>
+                      <span className={`text-[9px] font-semibold ${darkSubText}`}>Appeler</span>
+                    </a>
+                    <a href={`https://wa.me/${profile.whatsapp}`} target="_blank" rel="noopener noreferrer" className="contact-btn flex flex-col items-center gap-1 group">
+                      <div className="w-9 h-9 rounded-xl bg-[#25D366] flex items-center justify-center group-hover:bg-[#1da851]">
+                        <MessageCircle className="w-4 h-4 text-white" />
+                      </div>
+                      <span className={`text-[9px] font-semibold ${darkSubText}`}>WhatsApp</span>
+                    </a>
+                  </>
+                )}
+                {profile.emailPublic && (
+                  <a href={`mailto:${profile.email}`} className="contact-btn flex flex-col items-center gap-1 group">
+                    <div className="w-9 h-9 rounded-xl bg-[var(--brand)] flex items-center justify-center group-hover:bg-[var(--brand-dark)]">
+                      <Mail className="w-4 h-4 text-white" />
+                    </div>
+                    <span className={`text-[9px] font-semibold ${darkSubText}`}>Email</span>
+                  </a>
+                )}
+                {profile.url && (
+                  <a href={profile.url} target="_blank" rel="noopener noreferrer" className="contact-btn flex flex-col items-center gap-1 group">
+                    <div className="w-9 h-9 rounded-xl bg-[var(--brand)] flex items-center justify-center group-hover:bg-[var(--brand-dark)]">
+                      <Globe className="w-4 h-4 text-white" />
+                    </div>
+                    <span className={`text-[9px] font-semibold ${darkSubText}`}>Site web</span>
+                  </a>
+                )}
+              </div>
             </div>
-            <div className={`grid ${profile.url ? 'grid-cols-4' : 'grid-cols-3'} gap-2`}>
-              <a href={`tel:${profile.phoneRaw}`} className="contact-btn flex flex-col items-center gap-1 group">
-                <div className="w-9 h-9 rounded-xl bg-[var(--brand)] flex items-center justify-center group-hover:bg-[var(--brand-dark)]">
-                  <Phone className="w-4 h-4 text-white" />
-                </div>
-                <span className={`text-[9px] font-semibold ${darkSubText}`}>Appeler</span>
-              </a>
-              <a href={`https://wa.me/${profile.whatsapp}`} target="_blank" rel="noopener noreferrer" className="contact-btn flex flex-col items-center gap-1 group">
-                <div className="w-9 h-9 rounded-xl bg-[#25D366] flex items-center justify-center group-hover:bg-[#1da851]">
-                  <MessageCircle className="w-4 h-4 text-white" />
-                </div>
-                <span className={`text-[9px] font-semibold ${darkSubText}`}>WhatsApp</span>
-              </a>
-              <a href={`mailto:${profile.email}`} className="contact-btn flex flex-col items-center gap-1 group">
-                <div className="w-9 h-9 rounded-xl bg-[var(--brand)] flex items-center justify-center group-hover:bg-[var(--brand-dark)]">
-                  <Mail className="w-4 h-4 text-white" />
-                </div>
-                <span className={`text-[9px] font-semibold ${darkSubText}`}>Email</span>
-              </a>
-              {profile.url && (
-                <a href={profile.url} target="_blank" rel="noopener noreferrer" className="contact-btn flex flex-col items-center gap-1 group">
-                  <div className="w-9 h-9 rounded-xl bg-[var(--brand)] flex items-center justify-center group-hover:bg-[var(--brand-dark)]">
-                    <Globe className="w-4 h-4 text-white" />
-                  </div>
-                  <span className={`text-[9px] font-semibold ${darkSubText}`}>Site web</span>
-                </a>
-              )}
-            </div>
-          </div>
+          )}
 
           {/* ===== SERVICES + SAVE + SOCIAL ===== */}
           <div className="px-3 pt-2 pb-3 shrink-0 space-y-2">

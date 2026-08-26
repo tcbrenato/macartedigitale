@@ -14,9 +14,12 @@ interface ProfileRow {
   phone: string;
   phone_raw: string;
   whatsapp: string;
+  phone_public: boolean;
   email: string;
+  email_public: boolean;
   url: string | null;
   address: string;
+  address_public: boolean;
   city: string;
   country_line: string;
   status: ProfileStatus;
@@ -42,9 +45,12 @@ function fromRow(row: ProfileRow): Profile {
     phone: row.phone,
     phoneRaw: row.phone_raw,
     whatsapp: row.whatsapp,
+    phonePublic: row.phone_public ?? true,
     email: row.email,
+    emailPublic: row.email_public ?? true,
     url: row.url ?? undefined,
     address: row.address,
+    addressPublic: row.address_public ?? true,
     city: row.city,
     countryLine: row.country_line,
     status: row.status,
@@ -70,9 +76,12 @@ function toRow(profile: Omit<Profile, 'id'>) {
     phone: profile.phone,
     phone_raw: profile.phoneRaw,
     whatsapp: profile.whatsapp,
+    phone_public: profile.phonePublic,
     email: profile.email,
+    email_public: profile.emailPublic,
     url: profile.url ?? null,
     address: profile.address,
+    address_public: profile.addressPublic,
     city: profile.city,
     country_line: profile.countryLine,
     status: profile.status,
