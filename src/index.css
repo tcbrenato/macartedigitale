@@ -17,7 +17,6 @@
 html, body {
   scroll-behavior: smooth;
   overscroll-behavior: none;
-  overflow-x: hidden;
   max-width: 100%;
 }
 
@@ -28,7 +27,7 @@ body {
 }
 
 #root {
-  overflow-x: hidden;
+  overflow-x: clip;
   max-width: 100%;
 }
 
