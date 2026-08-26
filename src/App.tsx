@@ -12,7 +12,11 @@ import AdminProfiles from '@/pages/dashboard/AdminProfiles';
 import AdminEditProfile from '@/pages/dashboard/AdminEditProfile';
 import Directory from '@/pages/dashboard/Directory';
 import Connections from '@/pages/dashboard/Connections';
+import AdminContactMessages from '@/pages/dashboard/AdminContactMessages';
 import ProfilePage from '@/pages/ProfilePage';
+import Contact from '@/pages/Contact';
+import Privacy from '@/pages/Privacy';
+import Terms from '@/pages/Terms';
 import NotFound from '@/pages/NotFound';
 import RequireAuth from '@/components/RequireAuth';
 import RequireAdmin from '@/components/RequireAdmin';
@@ -61,7 +65,18 @@ function App() {
             </RequireAdmin>
           }
         />
+        <Route
+          path="admin/contact"
+          element={
+            <RequireAdmin>
+              <AdminContactMessages />
+            </RequireAdmin>
+          }
+        />
       </Route>
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/confidentialite" element={<Privacy />} />
+      <Route path="/cgu" element={<Terms />} />
       <Route path="/:slug" element={<ProfilePage />} />
       <Route path="*" element={<NotFound />} />
     </Routes>

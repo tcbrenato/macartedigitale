@@ -14,6 +14,7 @@ import {
   Users,
   Compass,
   UserCheck,
+  Mail,
 } from 'lucide-react';
 import { useAuth } from '@/lib/auth';
 import { supabase } from '@/lib/supabase';
@@ -250,6 +251,16 @@ function DashboardLayout() {
               <ShieldCheck className="w-4 h-4 shrink-0" />
               {!isCollapsed && 'Commandes RFID (admin)'}
             </NavLink>
+            <NavLink
+              to="/dashboard/admin/contact"
+              title={isCollapsed ? 'Messages (admin)' : undefined}
+              onClick={() => setMobileNavOpen(false)}
+              className={({ isActive }) => navLinkClass(isActive, isCollapsed)}
+              style={({ isActive }) => (isActive ? { backgroundColor: draft.themePrimary } : undefined)}
+            >
+              <Mail className="w-4 h-4 shrink-0" />
+              {!isCollapsed && 'Messages (admin)'}
+            </NavLink>
           </>
         )}
       </nav>
@@ -262,6 +273,17 @@ function DashboardLayout() {
       >
         <LogOut className="w-4 h-4 shrink-0" /> {!isCollapsed && 'Déconnexion'}
       </button>
+      {!isCollapsed && (
+        <div className="flex items-center justify-center gap-2.5 px-3.5 pt-2 text-[10px] text-gray-400">
+          <a href="/confidentialite" target="_blank" rel="noopener noreferrer" className="hover:text-gray-600">
+            Confidentialité
+          </a>
+          <span>·</span>
+          <a href="/cgu" target="_blank" rel="noopener noreferrer" className="hover:text-gray-600">
+            CGU
+          </a>
+        </div>
+      )}
     </>
   );
 

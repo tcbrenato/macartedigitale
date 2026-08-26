@@ -102,7 +102,18 @@ function Landing() {
       </section>
 
       {/* ===== FOOTER ===== */}
-      <footer className="px-6 py-6 text-center">
+      <footer className="px-6 py-6 flex flex-col items-center gap-2">
+        <div className="flex items-center gap-4 text-xs text-gray-500">
+          <Link to="/confidentialite" className="hover:text-gray-700">
+            Confidentialité
+          </Link>
+          <Link to="/cgu" className="hover:text-gray-700">
+            Conditions d'utilisation
+          </Link>
+          <Link to="/contact" className="hover:text-gray-700">
+            Contact
+          </Link>
+        </div>
         <p className="text-xs text-gray-400">© {new Date().getFullYear()} Carte de visite digitale</p>
       </footer>
     </div>

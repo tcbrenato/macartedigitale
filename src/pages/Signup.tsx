@@ -6,6 +6,7 @@ function Signup() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [accepted, setAccepted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
@@ -69,10 +70,29 @@ function Signup() {
             onChange={(e) => setPassword(e.target.value)}
             className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm outline-none focus:border-[#0100AD]"
           />
+          <label className="flex items-start gap-2 text-xs text-gray-500">
+            <input
+              type="checkbox"
+              checked={accepted}
+              onChange={(e) => setAccepted(e.target.checked)}
+              className="mt-0.5 shrink-0"
+            />
+            <span>
+              J'accepte la{' '}
+              <Link to="/confidentialite" target="_blank" className="text-[#0100AD] font-semibold">
+                politique de confidentialité
+              </Link>{' '}
+              et les{' '}
+              <Link to="/cgu" target="_blank" className="text-[#0100AD] font-semibold">
+                conditions d'utilisation
+              </Link>
+              .
+            </span>
+          </label>
           {error && <p className="text-xs text-red-600">{error}</p>}
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || !accepted}
             className="w-full bg-[#0100AD] hover:bg-[#00007a] disabled:opacity-60 text-white font-bold py-2.5 rounded-xl text-sm"
           >
             {loading ? 'Création…' : 'Créer mon compte'}
@@ -80,7 +100,8 @@ function Signup() {
         </form>
         <button
           onClick={handleGoogle}
-          className="w-full mt-3 bg-gray-100 hover:bg-gray-200 text-gray-900 font-semibold py-2.5 rounded-xl text-sm"
+          disabled={!accepted}
+          className="w-full mt-3 bg-gray-100 hover:bg-gray-200 disabled:opacity-60 text-gray-900 font-semibold py-2.5 rounded-xl text-sm"
         >
           Continuer avec Google
         </button>
