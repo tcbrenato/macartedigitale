@@ -33,29 +33,31 @@ interface AccessCardProps {
 function AccessCard({ icon: Icon, title, desc, onClick, href, disabled, badge, color }: AccessCardProps) {
   const inner = (
     <>
-      <div
-        className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-2xs transition-transform"
-        style={{ backgroundColor: disabled ? '#F3F4F6' : `${color}1A`, color: disabled ? '#9CA3AF' : color }}
-      >
-        <Icon className="w-5 h-5" />
-      </div>
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 flex-wrap">
-          <h3 className={`text-sm font-bold ${disabled ? 'text-gray-400' : 'text-gray-950'}`}>{title}</h3>
-          {badge && (
-            <span className="text-[10px] font-bold uppercase tracking-wider bg-red-50 text-red-600 border border-red-100 px-2 py-0.5 rounded-full shrink-0">
-              {badge}
-            </span>
-          )}
+      <div className="flex items-start justify-between w-full">
+        <div
+          className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-2xs transition-transform"
+          style={{ backgroundColor: disabled ? '#F3F4F6' : `${color}1A`, color: disabled ? '#9CA3AF' : color }}
+        >
+          <Icon className="w-5 h-5" />
         </div>
-        <p className={`text-xs mt-1 font-medium ${disabled ? 'text-gray-300' : 'text-gray-500'}`}>{desc}</p>
+        {!disabled && (
+          <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-gray-500 shrink-0 transition-colors mt-1" />
+        )}
       </div>
-      {!disabled && <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-gray-500 shrink-0 transition-colors" />}
+      <div className="flex items-center gap-2 flex-wrap mt-3">
+        <h3 className={`text-sm font-bold ${disabled ? 'text-gray-400' : 'text-gray-950'}`}>{title}</h3>
+        {badge && (
+          <span className="text-[10px] font-bold uppercase tracking-wider bg-red-50 text-red-600 border border-red-100 px-2 py-0.5 rounded-full shrink-0">
+            {badge}
+          </span>
+        )}
+      </div>
+      <p className={`text-xs mt-1 font-medium ${disabled ? 'text-gray-300' : 'text-gray-500'}`}>{desc}</p>
     </>
   );
 
   const className =
-    'flex items-center gap-4 bg-white/80 backdrop-blur-xl rounded-3xl shadow-sm border border-gray-100 p-4 text-left transition-all ' +
+    'flex flex-col items-start bg-white/80 backdrop-blur-xl rounded-3xl shadow-sm border border-gray-100 p-5 text-left transition-all h-full ' +
     (disabled ? 'cursor-not-allowed opacity-60' : 'hover:-translate-y-0.5 hover:shadow-md cursor-pointer group');
 
   if (disabled) {
@@ -119,7 +121,7 @@ function Overview() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <AccessCard
           icon={Pencil}
           title="Modifier ma carte"
