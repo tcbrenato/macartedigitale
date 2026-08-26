@@ -70,7 +70,7 @@ function Landing() {
             <div className="w-9 h-9 rounded-xl bg-[#0100AD] flex items-center justify-center text-white shadow-md shadow-[#0100AD]/20">
               <Zap className="w-5 h-5 text-white" />
             </div>
-            <span>Cardify</span>
+            <span>TCBcard</span>
           </div>
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#0100AD]/10 border border-[#0100AD]/20 text-[#0100AD] text-xs font-bold tracking-wide shadow-sm">
             <Sparkles className="w-3.5 h-3.5" />
@@ -240,9 +240,9 @@ function Landing() {
                     <div className="w-9 h-9 rounded-xl bg-[#0100AD] flex items-center justify-center text-white">
                         <Zap className="w-5 h-5 text-white" />
                     </div>
-                    <span>Cardify</span>
+                    <span>TCBcard</span>
                   </div>
-                  <p className="max-w-sm">© {new Date().getFullYear()} Cardify. La solution idéale pour un réseau professionnel moderne, rapide et impactant.</p>
+                  <p className="max-w-sm">© {new Date().getFullYear()} TCBcard. La solution idéale pour un réseau professionnel moderne, rapide et impactant.</p>
               </div>
               <div className="flex flex-col md:items-end gap-6">
                   <div className="flex items-center gap-5 text-[#0100AD]">

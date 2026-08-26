@@ -86,7 +86,7 @@ function Signup() {
             <div className="w-8 h-8 rounded-xl bg-[#0100AD] flex items-center justify-center text-white shadow-md shadow-[#0100AD]/30">
               <Zap className="w-4 h-4 text-white" />
             </div>
-            <span>Cardify</span>
+            <span>TCBcard</span>
           </div>
         </div>
 
