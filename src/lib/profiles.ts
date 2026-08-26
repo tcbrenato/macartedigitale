@@ -115,14 +115,56 @@ export async function getMyProfile(userId: string): Promise<Profile | null> {
 
 export async function saveProfile(profile: (Omit<Profile, 'id'> & { id?: string })): Promise<Profile> {
   const row = toRow(profile);
-  const { data, error } = await supabase
-    .from('profiles')
-    .upsert(profile.id ? { id: profile.id, ...row } : row, { onConflict: 'user_id' })
-    .select()
-    .single();
 
+  // Update-by-id when the row already exists, insert otherwise. (Upsert-by-user_id doesn't
+  // work reliably here: user_id can be null for an unclaimed profile an admin is editing,
+  // and NULL never conflicts with NULL under a unique constraint.)
+  if (profile.id) {
+    const { data, error } = await supabase.from('profiles').update(row).eq('id', profile.id).select().single();
+    if (error) throw error;
+    return fromRow(data as ProfileRow);
+  }
+
+  const { data, error } = await supabase.from('profiles').insert(row).select().single();
   if (error) throw error;
   return fromRow(data as ProfileRow);
+}
+
+export interface ProfileSummary {
+  id: string;
+  userId: string | null;
+  slug: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  status: ProfileStatus;
+}
+
+export async function getAllProfileSummaries(): Promise<ProfileSummary[]> {
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('id, user_id, slug, first_name, last_name, email, status')
+    .order('first_name', { ascending: true });
+
+  if (error) throw error;
+  return (data as Array<Pick<ProfileRow, 'id' | 'user_id' | 'slug' | 'first_name' | 'last_name' | 'email' | 'status'>>).map(
+    (row) => ({
+      id: row.id,
+      userId: row.user_id,
+      slug: row.slug,
+      firstName: row.first_name,
+      lastName: row.last_name,
+      email: row.email,
+      status: row.status,
+    })
+  );
+}
+
+export async function getProfileById(id: string): Promise<Profile | null> {
+  const { data, error } = await supabase.from('profiles').select('*').eq('id', id).maybeSingle();
+
+  if (error) throw error;
+  return data ? fromRow(data as ProfileRow) : null;
 }
 
 export async function uploadPhoto(userId: string, file: File): Promise<string> {

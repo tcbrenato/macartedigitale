@@ -1,6 +1,6 @@
 import { useEffect, useState, type ChangeEvent, type CSSProperties } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { LayoutGrid, Pencil, QrCode, LogOut, Menu, X, CreditCard, ShieldCheck, ChevronsLeft, ChevronsRight } from 'lucide-react';
+import { LayoutGrid, Pencil, QrCode, LogOut, Menu, X, CreditCard, ShieldCheck, ChevronsLeft, ChevronsRight, Users } from 'lucide-react';
 import { useAuth } from '@/lib/auth';
 import { supabase } from '@/lib/supabase';
 import { getMyProfile, saveProfile, uploadPhoto } from '@/lib/profiles';
@@ -183,16 +183,28 @@ function DashboardLayout() {
           </NavLink>
         ))}
         {isAdmin(user?.email) && (
-          <NavLink
-            to="/dashboard/admin/rfid"
-            title={isCollapsed ? 'Commandes RFID (admin)' : undefined}
-            onClick={() => setMobileNavOpen(false)}
-            className={({ isActive }) => navLinkClass(isActive, isCollapsed)}
-            style={({ isActive }) => (isActive ? { backgroundColor: draft.themePrimary } : undefined)}
-          >
-            <ShieldCheck className="w-4 h-4 shrink-0" />
-            {!isCollapsed && 'Commandes RFID (admin)'}
-          </NavLink>
+          <>
+            <NavLink
+              to="/dashboard/admin/profiles"
+              title={isCollapsed ? 'Gérer les cartes (admin)' : undefined}
+              onClick={() => setMobileNavOpen(false)}
+              className={({ isActive }) => navLinkClass(isActive, isCollapsed)}
+              style={({ isActive }) => (isActive ? { backgroundColor: draft.themePrimary } : undefined)}
+            >
+              <Users className="w-4 h-4 shrink-0" />
+              {!isCollapsed && 'Gérer les cartes (admin)'}
+            </NavLink>
+            <NavLink
+              to="/dashboard/admin/rfid"
+              title={isCollapsed ? 'Commandes RFID (admin)' : undefined}
+              onClick={() => setMobileNavOpen(false)}
+              className={({ isActive }) => navLinkClass(isActive, isCollapsed)}
+              style={({ isActive }) => (isActive ? { backgroundColor: draft.themePrimary } : undefined)}
+            >
+              <ShieldCheck className="w-4 h-4 shrink-0" />
+              {!isCollapsed && 'Commandes RFID (admin)'}
+            </NavLink>
+          </>
         )}
       </nav>
       <button

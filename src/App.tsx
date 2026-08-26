@@ -8,6 +8,8 @@ import EditCard from '@/pages/dashboard/EditCard';
 import QrCode from '@/pages/dashboard/QrCode';
 import RfidOrder from '@/pages/dashboard/RfidOrder';
 import AdminRfidOrders from '@/pages/dashboard/AdminRfidOrders';
+import AdminProfiles from '@/pages/dashboard/AdminProfiles';
+import AdminEditProfile from '@/pages/dashboard/AdminEditProfile';
 import ProfilePage from '@/pages/ProfilePage';
 import NotFound from '@/pages/NotFound';
 import RequireAuth from '@/components/RequireAuth';
@@ -36,6 +38,22 @@ function App() {
           element={
             <RequireAdmin>
               <AdminRfidOrders />
+            </RequireAdmin>
+          }
+        />
+        <Route
+          path="admin/profiles"
+          element={
+            <RequireAdmin>
+              <AdminProfiles />
+            </RequireAdmin>
+          }
+        />
+        <Route
+          path="admin/profiles/:id"
+          element={
+            <RequireAdmin>
+              <AdminEditProfile />
             </RequireAdmin>
           }
         />
