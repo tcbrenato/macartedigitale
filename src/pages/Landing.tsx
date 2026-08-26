@@ -23,7 +23,6 @@ const HERO_BENEFITS = [
 ];
 
 function Landing() {
-  const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [displayText, setDisplayText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
   const [loopNum, setLoopNum] = useState(0);
@@ -110,12 +109,6 @@ function Landing() {
                 className="min-h-[52px] px-8 flex items-center justify-center gap-2 bg-white text-[#0100AD] hover:bg-gray-100 font-bold rounded-2xl text-sm shadow-xl transition-all hover:scale-[1.02]"
               >
                 Créer ma carte <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                to="/features"
-                className="min-h-[52px] px-8 flex items-center justify-center bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold rounded-2xl text-sm backdrop-blur-md transition-all hover:scale-[1.02]"
-              >
-                Découvrir les avantages
               </Link>
             </div>
           </div>
