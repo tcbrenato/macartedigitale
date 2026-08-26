@@ -1,6 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { UserPlus, Palette, Share2, QrCode, Contact, Sparkles, ArrowRight, Zap, Linkedin, Facebook, Twitter, Mail } from 'lucide-react';
+import { UserPlus, Palette, Share2, QrCode, Contact, Sparkles, ArrowRight, Zap, Linkedin, Facebook, Instagram, Mail } from 'lucide-react';
+
+const RENATO_SOCIAL = {
+  linkedin: 'https://www.linkedin.com/in/renato-tchobo/',
+  facebook: 'https://www.facebook.com/profile.php?id=100083135836664&mibextid=ZbWKwL',
+  instagram: 'https://www.instagram.com/renato_tchobo?igsh=MXFqMGs1eTB6Zm5vdQ%3D%3D&utm_source=qr',
+};
 
 const STEPS = [
   { icon: UserPlus, title: 'Inscris-toi', desc: 'Crée ton compte en quelques secondes, avec ton email ou Google.' },
@@ -113,15 +119,18 @@ function Landing() {
             </div>
           </div>
 
-          {/* Image */}
+          {/* Vidéo de démo */}
           <div className="md:col-span-5 flex justify-center md:justify-end relative">
             <div className="absolute inset-0 flex items-center justify-center opacity-10">
                 <div className="w-[450px] h-[450px] rounded-full bg-white"></div>
             </div>
-            <img 
-              src="https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?q=80&w=800&auto=format&fit=crop" 
-              alt="Professionnelle souriante" 
-              className="relative z-10 w-full max-w-sm md:max-w-md lg:max-w-lg rounded-full object-cover aspect-square shadow-2xl border-4 border-white/30"
+            <video
+              src="/vidmcd.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="relative z-10 w-full max-w-sm md:max-w-md lg:max-w-lg rounded-3xl object-cover aspect-[4/3] shadow-2xl border-4 border-white/30"
             />
           </div>
 
@@ -148,6 +157,31 @@ function Landing() {
                 <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">{desc}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== 2.5 VOIS-LA EN ACTION ===== */}
+      <section className="px-6 py-20 bg-gray-50">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center max-w-md mx-auto mb-14">
+            <h2 className="text-xs font-bold uppercase tracking-widest text-[#0100AD] mb-2">Démonstration</h2>
+            <p className="text-2xl sm:text-3xl font-extrabold text-gray-900">Vois-la en action</p>
+          </div>
+          <div className="grid sm:grid-cols-2 gap-6 items-center">
+            <img
+              src="/carte.png"
+              alt="Carte de visite digitale scannée depuis un téléphone"
+              className="w-full rounded-3xl shadow-xl object-cover aspect-[4/3]"
+            />
+            <video
+              src="/vidm2.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full rounded-3xl shadow-xl object-cover aspect-[4/3]"
+            />
           </div>
         </div>
       </section>
@@ -212,10 +246,10 @@ function Landing() {
               </div>
               <div className="flex flex-col md:items-end gap-6">
                   <div className="flex items-center gap-5 text-[#0100AD]">
-                    <a href="#" className="p-2 rounded-full bg-gray-100 hover:bg-gray-200"><Linkedin className="w-5 h-5" /></a>
-                    <a href="#" className="p-2 rounded-full bg-gray-100 hover:bg-gray-200"><Facebook className="w-5 h-5" /></a>
-                    <a href="#" className="p-2 rounded-full bg-gray-100 hover:bg-gray-200"><Twitter className="w-5 h-5" /></a>
-                    <a href="#" className="p-2 rounded-full bg-gray-100 hover:bg-gray-200"><Mail className="w-5 h-5" /></a>
+                    <a href={RENATO_SOCIAL.linkedin} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-gray-100 hover:bg-gray-200"><Linkedin className="w-5 h-5" /></a>
+                    <a href={RENATO_SOCIAL.facebook} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-gray-100 hover:bg-gray-200"><Facebook className="w-5 h-5" /></a>
+                    <a href={RENATO_SOCIAL.instagram} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-gray-100 hover:bg-gray-200"><Instagram className="w-5 h-5" /></a>
+                    <Link to="/contact" className="p-2 rounded-full bg-gray-100 hover:bg-gray-200"><Mail className="w-5 h-5" /></Link>
                   </div>
                   <div className="flex items-center gap-6 font-medium flex-wrap">
                     <Link to="/confidentialite" className="hover:text-gray-900">Confidentialité</Link>
