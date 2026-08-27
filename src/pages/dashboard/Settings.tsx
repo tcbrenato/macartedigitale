@@ -1,10 +1,10 @@
 import { useOutletContext } from 'react-router-dom';
-import EssentialForm from './EssentialForm';
+import SettingsForm from './SettingsForm';
 import type { DashboardContext } from './DashboardLayout';
 
-function EditCard() {
+function Settings() {
   const context = useOutletContext<DashboardContext>();
-  return <EssentialForm {...context} />;
+  return <SettingsForm {...context} />;
 }
 
-export default EditCard;
+export default Settings;

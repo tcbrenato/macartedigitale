@@ -5,6 +5,7 @@ import Signup from '@/pages/Signup';
 import DashboardLayout from '@/pages/dashboard/DashboardLayout';
 import Overview from '@/pages/dashboard/Overview';
 import EditCard from '@/pages/dashboard/EditCard';
+import Settings from '@/pages/dashboard/Settings';
 import QrCode from '@/pages/dashboard/QrCode';
 import RfidOrder from '@/pages/dashboard/RfidOrder';
 import AdminRfidOrders from '@/pages/dashboard/AdminRfidOrders';
@@ -39,6 +40,7 @@ function App() {
       >
         <Route index element={<Overview />} />
         <Route path="edit" element={<EditCard />} />
+        <Route path="settings" element={<Settings />} />
         <Route path="qrcode" element={<QrCode />} />
         <Route path="rfid" element={<RfidOrder />} />
         <Route path="directory" element={<Directory />} />

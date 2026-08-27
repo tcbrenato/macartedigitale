@@ -1,42 +1,20 @@
-import { useMemo, useState } from 'react';
-import { Plus, Trash2, ExternalLink, Eye, Pencil, Check } from 'lucide-react';
-import { derivePhoneFields } from '@/lib/phone';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Plus, Trash2, ArrowLeft, Eye, Pencil, Check } from 'lucide-react';
 import { ICON_MAP, type IconName } from '@/lib/icons';
 import BusinessCard from '@/components/BusinessCard';
-import type { Profile, ProfileService, ProfileSocialLinks } from '@/types/profile';
+import type { Profile, ProfileService } from '@/types/profile';
 import type { DashboardContext } from './DashboardLayout';
-import {
-  Card,
-  Field,
-  PhotoField,
-  TemplatePicker,
-  SOCIAL_FIELDS,
-  VISIBILITY_OPTIONS,
-  REQUIRED_FIELD_GETTERS,
-  inputBase,
-  textareaBase,
-} from './profileFormShared';
+import { Card, Field, TemplatePicker, VISIBILITY_OPTIONS, inputBase, textareaBase } from './profileFormShared';
 
-/** The full card-editing form + live preview — used by the admin's per-user edit screen,
- * which (unlike the owner's own "Modifier ma carte") isn't split into essentiel/paramètres. */
-function ProfileForm({ draft, setDraft, saving, uploading, message, error, handleSave, handlePhotoChange }: DashboardContext) {
+/** Everything that isn't needed for a fast first publish: the card's link, organisation,
+ * location, services, privacy, template, and colors. Reached from EssentialForm's
+ * "Plus de paramètres" card. */
+function SettingsForm({ draft, setDraft, saving, message, error, handleSave }: DashboardContext) {
   const [mobileView, setMobileView] = useState<'edit' | 'preview'>('edit');
-
-  const progress = useMemo(() => {
-    const filled = REQUIRED_FIELD_GETTERS.filter((check) => check(draft)).length;
-    return Math.round((filled / REQUIRED_FIELD_GETTERS.length) * 100);
-  }, [draft]);
 
   const update = <K extends keyof DashboardContext['draft']>(key: K, value: DashboardContext['draft'][K]) => {
     setDraft((prev) => (prev ? { ...prev, [key]: value } : prev));
-  };
-
-  const updatePhone = (raw: string) => {
-    setDraft((prev) => (prev ? { ...prev, ...derivePhoneFields(raw) } : prev));
-  };
-
-  const updateSocial = (key: keyof ProfileSocialLinks, value: string) => {
-    setDraft((prev) => (prev ? { ...prev, social: { ...prev.social, [key]: value || undefined } } : prev));
   };
 
   const updateService = (index: number, patch: Partial<ProfileService>) => {
@@ -60,36 +38,16 @@ function ProfileForm({ draft, setDraft, saving, uploading, message, error, handl
 
   return (
     <div className="w-full max-w-6xl mx-auto px-4 sm:px-8 py-8 pb-28 lg:pb-16 flex flex-col gap-6">
-      <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-sm border border-gray-100 p-6 flex flex-col gap-2">
-        <div className="flex items-center justify-between text-xs font-semibold text-gray-600">
-          <span className="font-bold text-gray-900">Carte complétée</span>
-          <span className="px-2.5 py-1 rounded-full bg-gray-100 font-bold">{progress}%</span>
-        </div>
-        <div className="h-2.5 rounded-full bg-gray-100 overflow-hidden">
-          <div
-            className="h-full rounded-full transition-all duration-500"
-            style={{ width: `${progress}%`, backgroundColor: draft.themePrimary }}
-          />
-        </div>
-      </div>
+      <Link
+        to="/dashboard/edit"
+        className="inline-flex items-center gap-1.5 text-xs font-bold text-gray-500 hover:text-gray-950 w-fit transition-colors"
+      >
+        <ArrowLeft className="w-3.5 h-3.5" /> Retour à l'essentiel
+      </Link>
 
       <div className="grid lg:grid-cols-[1fr_400px] gap-6 items-start min-w-0">
         <div className={`${mobileView === 'edit' ? 'flex' : 'hidden'} lg:flex flex-col gap-5 min-w-0`}>
-          {draft.status === 'published' && (
-            <a
-              href={`/${draft.slug}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-xs font-bold w-fit px-4 py-2.5 rounded-2xl bg-white/80 backdrop-blur-xl shadow-xs border border-gray-100 hover:bg-white transition-all"
-              style={{ color: draft.themePrimary }}
-            >
-              <ExternalLink className="w-4 h-4" /> Voir la carte publiée : /{draft.slug}
-            </a>
-          )}
-
-          <Card title="Identité">
-            <PhotoField photo={draft.photo} uploading={uploading} onChange={handlePhotoChange} />
-
+          <Card title="Lien et organisation">
             <Field label="Lien de la carte (slug)" filled={Boolean(draft.slug)}>
               <p className="text-xs text-gray-400 mb-1.5 truncate font-medium">macartedigitale.vercel.app/</p>
               <input
@@ -99,78 +57,12 @@ function ProfileForm({ draft, setDraft, saving, uploading, message, error, handl
                 placeholder="ton-nom"
               />
             </Field>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Field label="Prénom" filled={Boolean(draft.firstName)}>
-                <input className={inputBase} value={draft.firstName} onChange={(e) => update('firstName', e.target.value)} />
-              </Field>
-              <Field label="Nom" filled={Boolean(draft.lastName)}>
-                <input className={inputBase} value={draft.lastName} onChange={(e) => update('lastName', e.target.value)} />
-              </Field>
-            </div>
-
             <Field label="Organisation" filled={Boolean(draft.organization)}>
               <input className={inputBase} value={draft.organization} onChange={(e) => update('organization', e.target.value)} />
             </Field>
-            <Field label="Titre / fonction" filled={Boolean(draft.title)}>
-              <input className={inputBase} value={draft.title} onChange={(e) => update('title', e.target.value)} />
-            </Field>
-            <Field label="Phrase d'accroche" filled={Boolean(draft.tagline)}>
-              <textarea className={textareaBase} rows={2} value={draft.tagline} onChange={(e) => update('tagline', e.target.value)} />
-            </Field>
           </Card>
 
-          <Card title="Contact">
-            <Field label="Téléphone" filled={Boolean(draft.phone)}>
-              <input
-                type="tel"
-                inputMode="tel"
-                className={inputBase}
-                value={draft.phone}
-                onChange={(e) => updatePhone(e.target.value)}
-                placeholder="+229 01 92 37 77 77"
-              />
-              <div className="mt-2.5">
-                <label className="flex items-center gap-2.5 text-xs text-gray-600 font-medium cursor-pointer w-fit select-none">
-                  <input
-                    type="checkbox"
-                    checked={draft.phonePublic}
-                    onChange={(v) => update('phonePublic', v.target.checked)}
-                    className="w-4 h-4 rounded-md border-gray-300 text-[var(--dash-brand)] focus:ring-[var(--dash-brand)]/20"
-                  />
-                  Visible publiquement sur ma carte
-                </label>
-              </div>
-            </Field>
-            <p className="text-[11px] text-gray-400 -mt-1 font-medium">
-              Le lien d'appel et le lien WhatsApp sont générés automatiquement à partir de ce numéro.
-            </p>
-
-            <Field label="Email" filled={Boolean(draft.email)}>
-              <input type="email" className={inputBase} value={draft.email} onChange={(e) => update('email', e.target.value)} />
-              <div className="mt-2.5">
-                <label className="flex items-center gap-2.5 text-xs text-gray-600 font-medium cursor-pointer w-fit select-none">
-                  <input
-                    type="checkbox"
-                    checked={draft.emailPublic}
-                    onChange={(v) => update('emailPublic', v.target.checked)}
-                    className="w-4 h-4 rounded-md border-gray-300 text-[var(--dash-brand)] focus:ring-[var(--dash-brand)]/20"
-                  />
-                  Visible publiquement sur ma carte
-                </label>
-              </div>
-            </Field>
-
-            <Field label="Site web (optionnel)">
-              <input
-                type="url"
-                className={inputBase}
-                value={draft.url ?? ''}
-                onChange={(e) => update('url', e.target.value || undefined)}
-                placeholder="https://..."
-              />
-            </Field>
-
+          <Card title="Profil">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Field label="Ville" filled={Boolean(draft.city)}>
                 <input className={inputBase} value={draft.city} onChange={(e) => update('city', e.target.value)} />
@@ -179,7 +71,6 @@ function ProfileForm({ draft, setDraft, saving, uploading, message, error, handl
                 <input className={inputBase} value={draft.countryLine} onChange={(e) => update('countryLine', e.target.value)} />
               </Field>
             </div>
-
             <Field label="Adresse (utilisée pour le contact enregistré)">
               <input className={inputBase} value={draft.address} onChange={(e) => update('address', e.target.value)} />
               <div className="mt-2.5">
@@ -194,20 +85,6 @@ function ProfileForm({ draft, setDraft, saving, uploading, message, error, handl
                 </label>
               </div>
             </Field>
-          </Card>
-
-          <Card title="Réseaux sociaux">
-            {SOCIAL_FIELDS.map(({ key, label }) => (
-              <Field key={key} label={label}>
-                <input
-                  type="url"
-                  className={inputBase}
-                  value={draft.social[key] ?? ''}
-                  onChange={(e) => updateSocial(key, e.target.value)}
-                  placeholder="https://..."
-                />
-              </Field>
-            ))}
           </Card>
 
           <Card title="Ce que je fais">
@@ -384,4 +261,4 @@ function ProfileForm({ draft, setDraft, saving, uploading, message, error, handl
   );
 }
 
-export default ProfileForm;
+export default SettingsForm;

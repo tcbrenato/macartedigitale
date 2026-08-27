@@ -1,5 +1,6 @@
 import { supabase } from '@/lib/supabase';
 import { getProfilesByUserIds } from '@/lib/profiles';
+import { slugify } from '@/lib/slug';
 import type { Profile } from '@/types/profile';
 
 export interface EventSummary {
@@ -18,16 +19,6 @@ interface EventRow {
 
 function fromRow(row: EventRow): EventSummary {
   return { id: row.id, name: row.name, slug: row.slug, createdAt: row.created_at };
-}
-
-function slugify(name: string): string {
-  return name
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)/g, '');
 }
 
 /** Events the given user belongs to — this is what gates access to Annuaire/Connexions. */

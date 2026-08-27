@@ -16,6 +16,7 @@ import {
   UserCheck,
   Mail,
   Calendar,
+  SlidersHorizontal,
 } from 'lucide-react';
 import { useAuth } from '@/lib/auth';
 import { supabase } from '@/lib/supabase';
@@ -72,6 +73,7 @@ function emptyProfile(userId: string, email: string): DraftProfile {
 const NAV_ITEMS = [
   { to: '/dashboard', label: 'Accueil', icon: LayoutGrid, end: true },
   { to: '/dashboard/edit', label: 'Modifier ma carte', icon: Pencil, end: false },
+  { to: '/dashboard/settings', label: 'Paramètres', icon: SlidersHorizontal, end: false },
   { to: '/dashboard/qrcode', label: 'QR Code', icon: QrCode, end: false },
   { to: '/dashboard/directory', label: 'Annuaire', icon: Compass, end: false },
   { to: '/dashboard/rfid', label: 'Commander une carte RFID', icon: CreditCard, end: false },
