@@ -9,7 +9,7 @@ interface ServicesModalProps {
 }
 
 function ServicesModal({ profile, logic }: ServicesModalProps) {
-  const { servicesOpen, setServicesOpen, darkCard, darkText, darkSubText, darkModalBorder, darkModalClose } = logic;
+  const { servicesOpen, setServicesOpen, darkCard, darkText, darkSubText, darkModalBorder, darkModalClose, labels } = logic;
 
   if (!servicesOpen) return null;
 
@@ -23,7 +23,7 @@ function ServicesModal({ profile, logic }: ServicesModalProps) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className={`flex items-center justify-between px-4 py-3 border-b shrink-0 ${darkModalBorder}`}>
-          <h3 className={`text-sm font-bold ${darkText}`}>Ce que je fais concrètement</h3>
+          <h3 className={`text-sm font-bold ${darkText}`}>{labels.whatIDo}</h3>
           <button
             onClick={() => setServicesOpen(false)}
             className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 ${darkModalClose}`}

@@ -15,13 +15,14 @@ function MinimalTemplate({ profile, logic }: TemplateProps) {
     darkText,
     darkSubText,
     socialLinks,
+    labels,
   } = logic;
 
   const rows = [
-    phoneVisible && { icon: Phone, label: 'Appeler', href: `tel:${profile.phoneRaw}` },
+    phoneVisible && { icon: Phone, label: labels.call, href: `tel:${profile.phoneRaw}` },
     phoneVisible && { icon: MessageCircle, label: 'WhatsApp', href: `https://wa.me/${profile.whatsapp}` },
     emailVisible && { icon: Mail, label: 'Email', href: `mailto:${profile.email}` },
-    profile.url && { icon: Globe, label: 'Site web', href: profile.url },
+    profile.url && { icon: Globe, label: labels.website, href: profile.url },
   ].filter(Boolean) as { icon: typeof Phone; label: string; href: string }[];
 
   return (
@@ -65,7 +66,7 @@ function MinimalTemplate({ profile, logic }: TemplateProps) {
           ))}
           <button onClick={() => setServicesOpen(true)} className="flex items-center gap-3 py-2.5 text-left">
             <span className="w-4 h-4 rounded-full border brand-text shrink-0" style={{ borderColor: 'var(--brand)' }} />
-            <span className={`text-sm flex-1 underline underline-offset-4 ${darkText}`}>Ce que je fais concrètement</span>
+            <span className={`text-sm flex-1 underline underline-offset-4 ${darkText}`}>{labels.whatIDo}</span>
             <ChevronRight className={`w-4 h-4 ${darkSubText}`} />
           </button>
         </div>
@@ -76,7 +77,7 @@ function MinimalTemplate({ profile, logic }: TemplateProps) {
             className="w-full border py-2.5 rounded-full text-xs font-semibold flex items-center justify-center gap-2 brand-text"
             style={{ borderColor: 'var(--brand)' }}
           >
-            {saved ? <><CheckCircle2 className="w-4 h-4" /> Contact enregistré !</> : <><Download className="w-4 h-4" /> Enregistrer le contact</>}
+            {saved ? <><CheckCircle2 className="w-4 h-4" /> {labels.contactSaved}</> : <><Download className="w-4 h-4" /> {labels.saveContact}</>}
           </button>
           {socialLinks.length > 0 && (
             <div className="flex items-center justify-center gap-4">

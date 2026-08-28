@@ -24,6 +24,10 @@ export type ProfileStatus = 'draft' | 'published';
  */
 export type ProfileVisibility = 'public' | 'link_only' | 'connections_only';
 
+/** Language of the card's own UI chrome (buttons, "What I do" modal title, etc.) —
+ * independent from the dashboard's language, which is always French. */
+export type ProfileLanguage = 'fr' | 'en';
+
 export type TemplateId =
   | 'classic'
   | 'minimal'
@@ -70,6 +74,7 @@ export interface Profile {
 
   status: ProfileStatus;
   visibility: ProfileVisibility;
+  language: ProfileLanguage;
   templateId: TemplateId;
   themePrimary: string;
   themeSecondary: string;

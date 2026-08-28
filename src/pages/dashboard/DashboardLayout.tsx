@@ -62,6 +62,7 @@ function emptyProfile(userId: string, email: string): DraftProfile {
     countryLine: '',
     status: 'draft',
     visibility: 'public',
+    language: 'fr',
     templateId: 'classic',
     themePrimary: '#0100AD',
     themeSecondary: '#3a39d0',

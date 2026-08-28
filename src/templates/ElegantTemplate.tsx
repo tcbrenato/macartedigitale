@@ -16,6 +16,7 @@ function ElegantTemplate({ profile, logic }: TemplateProps) {
     darkText,
     darkSubText,
     socialLinks,
+    labels,
   } = logic;
 
   return (
@@ -54,7 +55,7 @@ function ElegantTemplate({ profile, logic }: TemplateProps) {
                   <>
                     <a href={`tel:${profile.phoneRaw}`} className="flex flex-col items-center gap-1">
                       <Phone className="w-4 h-4 brand-text" />
-                      <span className={`text-[8px] font-semibold uppercase tracking-wide ${darkSubText}`}>Appeler</span>
+                      <span className={`text-[8px] font-semibold uppercase tracking-wide ${darkSubText}`}>{labels.call}</span>
                     </a>
                     <a href={`https://wa.me/${profile.whatsapp}`} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-1">
                       <MessageCircle className="w-4 h-4 brand-text" />
@@ -71,7 +72,7 @@ function ElegantTemplate({ profile, logic }: TemplateProps) {
                 {profile.url && (
                   <a href={profile.url} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-1">
                     <Globe className="w-4 h-4 brand-text" />
-                    <span className={`text-[8px] font-semibold uppercase tracking-wide ${darkSubText}`}>Site web</span>
+                    <span className={`text-[8px] font-semibold uppercase tracking-wide ${darkSubText}`}>{labels.website}</span>
                   </a>
                 )}
               </div>
@@ -84,14 +85,14 @@ function ElegantTemplate({ profile, logic }: TemplateProps) {
               className="w-full py-2.5 text-[10px] font-semibold uppercase tracking-[0.15em] border-y"
               style={{ borderColor: 'var(--brand)', color: 'var(--brand)' }}
             >
-              Ce que je fais concrètement
+              {labels.whatIDo}
             </button>
             <button
               onClick={handleSave}
               className="w-full text-white py-2.5 flex items-center justify-center gap-2 text-[10px] font-semibold uppercase tracking-[0.15em]"
               style={{ backgroundColor: 'var(--brand)' }}
             >
-              {saved ? <><CheckCircle2 className="w-3.5 h-3.5" /> Contact enregistré !</> : <><Download className="w-3.5 h-3.5" /> Enregistrer le contact</>}
+              {saved ? <><CheckCircle2 className="w-3.5 h-3.5" /> {labels.contactSaved}</> : <><Download className="w-3.5 h-3.5" /> {labels.saveContact}</>}
             </button>
             {socialLinks.length > 0 && (
               <div className="flex items-center justify-center gap-4 pt-1">

@@ -18,6 +18,7 @@ function SocialTemplate({ profile, logic }: TemplateProps) {
     darkSubText,
     darkLabel,
     socialLinks,
+    labels,
   } = logic;
 
   return (
@@ -41,7 +42,7 @@ function SocialTemplate({ profile, logic }: TemplateProps) {
 
         {socialLinks.length > 0 && (
           <div className="px-4 pb-2 shrink-0">
-            <p className={`text-[9px] font-bold uppercase tracking-widest text-center mb-2 ${darkLabel}`}>Suivez-moi</p>
+            <p className={`text-[9px] font-bold uppercase tracking-widest text-center mb-2 ${darkLabel}`}>{labels.followMe}</p>
             <div className="flex items-center justify-center gap-4">
               {socialLinks.map(([key, href]) => {
                 const SocialIcon = SOCIAL_ICONS[key];
@@ -74,7 +75,7 @@ function SocialTemplate({ profile, logic }: TemplateProps) {
                       <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${dark ? 'bg-[#1e2148]' : 'bg-gray-100'}`}>
                         <Phone className="w-3.5 h-3.5 brand-text" />
                       </div>
-                      <span className={`text-[8px] font-semibold ${darkSubText}`}>Appeler</span>
+                      <span className={`text-[8px] font-semibold ${darkSubText}`}>{labels.call}</span>
                     </a>
                     <a href={`https://wa.me/${profile.whatsapp}`} target="_blank" rel="noopener noreferrer" className="contact-btn flex flex-col items-center gap-1 group">
                       <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${dark ? 'bg-[#1e2148]' : 'bg-gray-100'}`}>
@@ -97,7 +98,7 @@ function SocialTemplate({ profile, logic }: TemplateProps) {
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${dark ? 'bg-[#1e2148]' : 'bg-gray-100'}`}>
                       <Globe className="w-3.5 h-3.5 brand-text" />
                     </div>
-                    <span className={`text-[8px] font-semibold ${darkSubText}`}>Site web</span>
+                    <span className={`text-[8px] font-semibold ${darkSubText}`}>{labels.website}</span>
                   </a>
                 )}
               </div>
@@ -109,13 +110,13 @@ function SocialTemplate({ profile, logic }: TemplateProps) {
               onClick={() => setServicesOpen(true)}
               className="w-full bg-[var(--brand)] hover:bg-[var(--brand-dark)] text-white font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 text-xs tracking-wide"
             >
-              <Sparkles className="w-4 h-4" /> Ce que je fais concrètement
+              <Sparkles className="w-4 h-4" /> {labels.whatIDo}
             </button>
             <button
               onClick={handleSave}
               className="save-btn w-full brand-gradient text-white font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 text-xs tracking-wide"
             >
-              {saved ? <><CheckCircle2 className="w-4 h-4" /> Contact enregistré !</> : <><Download className="w-4 h-4" /> Enregistrer le contact</>}
+              {saved ? <><CheckCircle2 className="w-4 h-4" /> {labels.contactSaved}</> : <><Download className="w-4 h-4" /> {labels.saveContact}</>}
             </button>
           </div>
         </div>

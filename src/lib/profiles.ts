@@ -1,5 +1,13 @@
 import { supabase } from '@/lib/supabase';
-import type { Profile, ProfileService, ProfileSocialLinks, ProfileStatus, ProfileVisibility, TemplateId } from '@/types/profile';
+import type {
+  Profile,
+  ProfileLanguage,
+  ProfileService,
+  ProfileSocialLinks,
+  ProfileStatus,
+  ProfileVisibility,
+  TemplateId,
+} from '@/types/profile';
 
 const VALID_TEMPLATE_IDS: TemplateId[] = [
   'classic',
@@ -16,6 +24,10 @@ const VALID_TEMPLATE_IDS: TemplateId[] = [
 
 function toTemplateId(value: string): TemplateId {
   return (VALID_TEMPLATE_IDS as string[]).includes(value) ? (value as TemplateId) : 'classic';
+}
+
+function toLanguage(value: string | undefined): ProfileLanguage {
+  return value === 'en' ? 'en' : 'fr';
 }
 
 interface ProfileRow {
@@ -41,6 +53,7 @@ interface ProfileRow {
   country_line: string;
   status: ProfileStatus;
   visibility: ProfileVisibility;
+  language: string;
   template_id: string;
   theme_primary: string;
   theme_secondary: string;
@@ -73,6 +86,7 @@ function fromRow(row: ProfileRow): Profile {
     countryLine: row.country_line,
     status: row.status,
     visibility: row.visibility ?? 'public',
+    language: toLanguage(row.language),
     templateId: toTemplateId(row.template_id),
     themePrimary: row.theme_primary,
     themeSecondary: row.theme_secondary,
@@ -105,6 +119,7 @@ function toRow(profile: Omit<Profile, 'id'>) {
     country_line: profile.countryLine,
     status: profile.status,
     visibility: profile.visibility,
+    language: profile.language,
     template_id: profile.templateId,
     theme_primary: profile.themePrimary,
     theme_secondary: profile.themeSecondary,

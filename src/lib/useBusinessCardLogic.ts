@@ -12,6 +12,31 @@ export const SOCIAL_ICONS = {
   youtube: Youtube,
 } as const;
 
+/** The card's own UI chrome (button labels, modal title) — independent from the
+ * dashboard, which stays French regardless. Keyed by `profile.language`. */
+const LABELS = {
+  fr: {
+    call: 'Appeler',
+    website: 'Site web',
+    contactDirect: 'Contact direct',
+    whatIDo: 'Ce que je fais concrètement',
+    whatIDoShort: 'Ce que je fais',
+    saveContact: 'Enregistrer le contact',
+    contactSaved: 'Contact enregistré !',
+    followMe: 'Suivez-moi',
+  },
+  en: {
+    call: 'Call',
+    website: 'Website',
+    contactDirect: 'Contact',
+    whatIDo: 'What I do',
+    whatIDoShort: 'What I do',
+    saveContact: 'Save contact',
+    contactSaved: 'Contact saved!',
+    followMe: 'Follow me',
+  },
+} as const;
+
 export interface BusinessCardLogicOptions {
   profile: Profile;
   preview?: boolean;
@@ -91,8 +116,11 @@ export function useBusinessCardLogic({ profile, preview = false, isConnection = 
     string,
   ][];
 
+  const labels = LABELS[profile.language];
+
   return {
     saved,
+    labels,
     servicesOpen,
     setServicesOpen,
     dark,

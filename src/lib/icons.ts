@@ -14,6 +14,11 @@ import {
   Stethoscope,
   Scale,
   Lightbulb,
+  Handshake,
+  Hammer,
+  Home,
+  KeyRound,
+  TrendingUp,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -33,6 +38,11 @@ export const ICON_MAP = {
   Stethoscope,
   Scale,
   Lightbulb,
+  Handshake,
+  Hammer,
+  Home,
+  KeyRound,
+  TrendingUp,
 } satisfies Record<string, LucideIcon>;
 
 export type IconName = keyof typeof ICON_MAP;

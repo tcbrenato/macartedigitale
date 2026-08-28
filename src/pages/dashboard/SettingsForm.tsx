@@ -60,6 +60,20 @@ function SettingsForm({ draft, setDraft, saving, message, error, handleSave }: D
             <Field label="Organisation" filled={Boolean(draft.organization)}>
               <input className={inputBase} value={draft.organization} onChange={(e) => update('organization', e.target.value)} />
             </Field>
+            <Field label="Langue de la carte">
+              <select
+                className={inputBase}
+                value={draft.language}
+                onChange={(e) => update('language', e.target.value as Profile['language'])}
+              >
+                <option value="fr">Français</option>
+                <option value="en">English</option>
+              </select>
+              <p className="text-[11px] text-gray-400 mt-1.5 font-medium">
+                Change la langue des boutons de la carte (Appeler/Call, Site web/Website...). Le contenu que tu écris
+                (nom, titre, services...) reste dans la langue que tu choisis toi-même.
+              </p>
+            </Field>
           </Card>
 
           <Card title="Profil">

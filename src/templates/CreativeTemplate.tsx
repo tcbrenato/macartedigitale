@@ -16,6 +16,7 @@ function CreativeTemplate({ profile, logic }: TemplateProps) {
     darkText,
     darkSubText,
     socialLinks,
+    labels,
   } = logic;
 
   return (
@@ -62,7 +63,7 @@ function CreativeTemplate({ profile, logic }: TemplateProps) {
                       <div className="w-10 h-10 rounded-2xl flex items-center justify-center transition-transform group-hover:-rotate-6" style={{ backgroundColor: 'var(--brand)' }}>
                         <Phone className="w-4 h-4 text-white" />
                       </div>
-                      <span className={`text-[9px] font-bold ${darkSubText}`}>Appeler</span>
+                      <span className={`text-[9px] font-bold ${darkSubText}`}>{labels.call}</span>
                     </a>
                     <a href={`https://wa.me/${profile.whatsapp}`} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-1 group">
                       <div className="w-10 h-10 rounded-2xl bg-[#25D366] flex items-center justify-center transition-transform group-hover:rotate-6">
@@ -85,7 +86,7 @@ function CreativeTemplate({ profile, logic }: TemplateProps) {
                     <div className="w-10 h-10 rounded-2xl flex items-center justify-center transition-transform group-hover:rotate-6" style={{ backgroundColor: 'var(--brand)' }}>
                       <Globe className="w-4 h-4 text-white" />
                     </div>
-                    <span className={`text-[9px] font-bold ${darkSubText}`}>Site web</span>
+                    <span className={`text-[9px] font-bold ${darkSubText}`}>{labels.website}</span>
                   </a>
                 )}
               </div>
@@ -98,13 +99,13 @@ function CreativeTemplate({ profile, logic }: TemplateProps) {
               className="w-full text-white font-bold py-3 rounded-2xl flex items-center justify-center gap-2 text-xs tracking-wide"
               style={{ background: 'linear-gradient(120deg, var(--brand), var(--brand-light))' }}
             >
-              <Sparkles className="w-4 h-4" /> Ce que je fais concrètement
+              <Sparkles className="w-4 h-4" /> {labels.whatIDo}
             </button>
             <button
               onClick={handleSave}
               className={`w-full py-3 rounded-2xl flex items-center justify-center gap-2 text-xs font-bold ${dark ? 'bg-white/10 text-white' : 'bg-gray-100 text-gray-900'}`}
             >
-              {saved ? <><CheckCircle2 className="w-4 h-4" /> Contact enregistré !</> : <><Download className="w-4 h-4" /> Enregistrer le contact</>}
+              {saved ? <><CheckCircle2 className="w-4 h-4" /> {labels.contactSaved}</> : <><Download className="w-4 h-4" /> {labels.saveContact}</>}
             </button>
             {socialLinks.length > 0 && (
               <div className="flex items-center justify-center gap-3">

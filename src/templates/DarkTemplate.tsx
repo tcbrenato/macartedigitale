@@ -4,7 +4,7 @@ import type { TemplateProps } from './types';
 
 /** Always dark, regardless of the shared light/dark toggle — dark IS this template's identity. */
 function DarkTemplate({ profile, logic }: TemplateProps) {
-  const { saved, setServicesOpen, phoneVisible, emailVisible, handleSave, contactCount, contactGridClass, socialLinks } = logic;
+  const { saved, setServicesOpen, phoneVisible, emailVisible, handleSave, contactCount, contactGridClass, socialLinks, labels } = logic;
 
   return (
     <div className="w-full max-w-[400px] h-full max-h-[820px] flex flex-col animate-fade-in-up">
@@ -35,7 +35,7 @@ function DarkTemplate({ profile, logic }: TemplateProps) {
                     className="flex flex-col items-center gap-1 py-2.5 rounded-xl bg-[#14141e] border border-[var(--brand)]/30"
                   >
                     <Phone className="w-4 h-4" style={{ color: 'var(--brand-light)' }} />
-                    <span className="text-[9px] font-semibold text-gray-400">Appeler</span>
+                    <span className="text-[9px] font-semibold text-gray-400">{labels.call}</span>
                   </a>
                   <a
                     href={`https://wa.me/${profile.whatsapp}`}
@@ -65,7 +65,7 @@ function DarkTemplate({ profile, logic }: TemplateProps) {
                   className="flex flex-col items-center gap-1 py-2.5 rounded-xl bg-[#14141e] border border-[var(--brand)]/30"
                 >
                   <Globe className="w-4 h-4" style={{ color: 'var(--brand-light)' }} />
-                  <span className="text-[9px] font-semibold text-gray-400">Site web</span>
+                  <span className="text-[9px] font-semibold text-gray-400">{labels.website}</span>
                 </a>
               )}
             </div>
@@ -78,13 +78,13 @@ function DarkTemplate({ profile, logic }: TemplateProps) {
             className="w-full text-white font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 text-xs tracking-wide"
             style={{ background: 'linear-gradient(135deg, var(--brand), var(--brand-light))', boxShadow: '0 0 20px -4px var(--brand)' }}
           >
-            <Sparkles className="w-4 h-4" /> Ce que je fais concrètement
+            <Sparkles className="w-4 h-4" /> {labels.whatIDo}
           </button>
           <button
             onClick={handleSave}
             className="w-full py-2.5 rounded-xl flex items-center justify-center gap-2 text-xs font-bold tracking-wide bg-[#14141e] border border-[var(--brand)]/40 text-white"
           >
-            {saved ? <><CheckCircle2 className="w-4 h-4" /> Contact enregistré !</> : <><Download className="w-4 h-4" /> Enregistrer le contact</>}
+            {saved ? <><CheckCircle2 className="w-4 h-4" /> {labels.contactSaved}</> : <><Download className="w-4 h-4" /> {labels.saveContact}</>}
           </button>
           {socialLinks.length > 0 && (
             <div className="flex items-center justify-center gap-3">

@@ -16,6 +16,7 @@ function SplitTemplate({ profile, logic }: TemplateProps) {
     darkCard,
     darkSubText,
     socialLinks,
+    labels,
   } = logic;
 
   return (
@@ -51,7 +52,7 @@ function SplitTemplate({ profile, logic }: TemplateProps) {
                       <div className="w-9 h-9 rounded-full bg-[var(--brand)]/10 flex items-center justify-center group-hover:bg-[var(--brand)]">
                         <Phone className="w-4 h-4 brand-text group-hover:text-white" />
                       </div>
-                      <span className={`text-[9px] font-semibold ${darkSubText}`}>Appeler</span>
+                      <span className={`text-[9px] font-semibold ${darkSubText}`}>{labels.call}</span>
                     </a>
                     <a href={`https://wa.me/${profile.whatsapp}`} target="_blank" rel="noopener noreferrer" className="contact-btn flex flex-col items-center gap-1 group">
                       <div className="w-9 h-9 rounded-full bg-[#25D366]/10 flex items-center justify-center group-hover:bg-[#25D366]">
@@ -74,7 +75,7 @@ function SplitTemplate({ profile, logic }: TemplateProps) {
                     <div className="w-9 h-9 rounded-full bg-[var(--brand)]/10 flex items-center justify-center group-hover:bg-[var(--brand)]">
                       <Globe className="w-4 h-4 brand-text group-hover:text-white" />
                     </div>
-                    <span className={`text-[9px] font-semibold ${darkSubText}`}>Site web</span>
+                    <span className={`text-[9px] font-semibold ${darkSubText}`}>{labels.website}</span>
                   </a>
                 )}
               </div>
@@ -86,14 +87,14 @@ function SplitTemplate({ profile, logic }: TemplateProps) {
               onClick={() => setServicesOpen(true)}
               className="w-full bg-[var(--brand)] hover:bg-[var(--brand-dark)] text-white font-bold py-2.5 rounded-full flex items-center justify-center gap-2 text-xs tracking-wide"
             >
-              <Sparkles className="w-4 h-4" /> Ce que je fais concrètement
+              <Sparkles className="w-4 h-4" /> {labels.whatIDo}
             </button>
             <button
               onClick={handleSave}
               className="w-full border-2 py-2.5 rounded-full flex items-center justify-center gap-2 text-xs font-bold tracking-wide brand-text"
               style={{ borderColor: 'var(--brand)' }}
             >
-              {saved ? <><CheckCircle2 className="w-4 h-4" /> Contact enregistré !</> : <><Download className="w-4 h-4" /> Enregistrer le contact</>}
+              {saved ? <><CheckCircle2 className="w-4 h-4" /> {labels.contactSaved}</> : <><Download className="w-4 h-4" /> {labels.saveContact}</>}
             </button>
             {socialLinks.length > 0 && (
               <div className="flex items-center justify-center gap-3">

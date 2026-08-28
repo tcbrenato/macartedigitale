@@ -18,6 +18,7 @@ function CompactTemplate({ profile, logic }: TemplateProps) {
     darkSubText,
     darkSocial,
     socialLinks,
+    labels,
   } = logic;
 
   return (
@@ -49,7 +50,7 @@ function CompactTemplate({ profile, logic }: TemplateProps) {
               <>
                 <a href={`tel:${profile.phoneRaw}`} className="flex flex-col items-center gap-0.5 py-1.5 rounded-lg bg-[var(--brand)]/10">
                   <Phone className="w-3.5 h-3.5 brand-text" />
-                  <span className={`text-[8px] font-semibold ${darkSubText}`}>Appeler</span>
+                  <span className={`text-[8px] font-semibold ${darkSubText}`}>{labels.call}</span>
                 </a>
                 <a href={`https://wa.me/${profile.whatsapp}`} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-0.5 py-1.5 rounded-lg bg-[#25D366]/10">
                   <MessageCircle className="w-3.5 h-3.5 text-[#25D366]" />
@@ -66,14 +67,14 @@ function CompactTemplate({ profile, logic }: TemplateProps) {
             {profile.url && (
               <a href={profile.url} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-0.5 py-1.5 rounded-lg bg-[var(--brand)]/10">
                 <Globe className="w-3.5 h-3.5 brand-text" />
-                <span className={`text-[8px] font-semibold ${darkSubText}`}>Site web</span>
+                <span className={`text-[8px] font-semibold ${darkSubText}`}>{labels.website}</span>
               </a>
             )}
           </div>
         )}
 
         <div className="shrink-0">
-          <p className={`text-[9px] font-bold uppercase tracking-wide mb-1 ${darkSubText}`}>Ce que je fais</p>
+          <p className={`text-[9px] font-bold uppercase tracking-wide mb-1 ${darkSubText}`}>{labels.whatIDoShort}</p>
           <div className="grid grid-cols-3 gap-1.5">
             {profile.services.slice(0, 6).map((s) => {
               const Icon = ICON_MAP[s.icon];
@@ -91,7 +92,7 @@ function CompactTemplate({ profile, logic }: TemplateProps) {
           onClick={handleSave}
           className="save-btn w-full brand-gradient text-white font-bold py-2 rounded-lg flex items-center justify-center gap-1.5 text-[10px] tracking-wide mt-auto shrink-0"
         >
-          {saved ? <><CheckCircle2 className="w-3.5 h-3.5" /> Contact enregistré !</> : <><Download className="w-3.5 h-3.5" /> Enregistrer le contact</>}
+          {saved ? <><CheckCircle2 className="w-3.5 h-3.5" /> {labels.contactSaved}</> : <><Download className="w-3.5 h-3.5" /> {labels.saveContact}</>}
         </button>
 
         {socialLinks.length > 0 && (

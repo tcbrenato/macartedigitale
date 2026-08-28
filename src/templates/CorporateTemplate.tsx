@@ -15,6 +15,7 @@ function CorporateTemplate({ profile, logic }: TemplateProps) {
     darkText,
     darkSubText,
     socialLinks,
+    labels,
   } = logic;
 
   const rows = [
@@ -69,14 +70,14 @@ function CorporateTemplate({ profile, logic }: TemplateProps) {
             onClick={() => setServicesOpen(true)}
             className={`w-full py-2.5 rounded-md text-xs font-bold border ${dark ? 'border-[#1e2148] text-white' : 'border-gray-300 text-gray-900'}`}
           >
-            Ce que je fais concrètement
+            {labels.whatIDo}
           </button>
           <button
             onClick={handleSave}
             className="w-full text-white font-bold py-2.5 rounded-md flex items-center justify-center gap-2 text-xs"
             style={{ backgroundColor: 'var(--brand)' }}
           >
-            {saved ? <><CheckCircle2 className="w-4 h-4" /> Contact enregistré !</> : <><Download className="w-4 h-4" /> Enregistrer le contact</>}
+            {saved ? <><CheckCircle2 className="w-4 h-4" /> {labels.contactSaved}</> : <><Download className="w-4 h-4" /> {labels.saveContact}</>}
           </button>
           {socialLinks.length > 0 && (
             <div className="flex items-center justify-center gap-4 pt-1">
